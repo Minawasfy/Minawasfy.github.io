@@ -41,7 +41,7 @@ body, html {
 /* Hero Background */
 .hero {
   height: 100vh;
-  background: url('../Photos/Screenshot_237.png') center center / cover no-repeat; /* Change Picture here */
+  background: url('../Resources/1690995093527.jpg') center center / cover no-repeat; /* Change Picture here */
   position: relative;
   color: white;
 }
