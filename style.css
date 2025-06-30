@@ -40,7 +40,7 @@ body, html {
 /* Hero Section */
 .hero {
   height: 100vh;
-  background: url('C:\Users\minas\OneDrive\Documents\Lightshot/Screenshot_237.jpg') center center / cover no-repeat;
+  background: url('Screenshot_237.png') center center / cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
