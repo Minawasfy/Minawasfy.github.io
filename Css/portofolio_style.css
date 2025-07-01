@@ -8,6 +8,7 @@ body {
 }
 
 .nav-links {
+  position: absolute;
   margin: 50px 0 0 20px;
 }
 
@@ -20,6 +21,9 @@ body {
 .text-header {
   text-align: center;
   padding: 32px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  
 }
 
 .row {
@@ -47,6 +51,11 @@ body {
     flex: 50%;
     max-width: 100%;
   }
+
+  .nav-links {
+  position: relative;
+  margin: 50px 0 0 20px;
+}
 }
 
 /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
@@ -58,6 +67,7 @@ body {
   .nav-links a img {
     width: 80px;
     height: 80px;
+    position: absolute;
   }
 
   .gallery {
