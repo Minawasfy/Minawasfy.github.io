@@ -4,15 +4,24 @@
 
 
 
-.header {
+header {
   text-align: center;
   padding: 32px;
+  height: 100vh;
+  background: url('../Resources/1690995093527.jpg') center top / cover no-repeat;
+  /* Change Picture here */
+  position: relative;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
 
 
-body, html {
+body{
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  background-color: #E5EEF5;
 }
 
 
@@ -38,13 +47,6 @@ body, html {
   background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
 }
 
-/* Hero Background */
-.hero {
-  height: 100vh;
-  background: url('../Resources/1690995093527.jpg') center center / cover no-repeat; /* Change Picture here */
-  position: relative;
-  color: white;
-}
 
 .hero-overlay-top,
 .hero-overlay-bottom {
@@ -52,7 +54,8 @@ body, html {
   left: 0;
   width: 100%;
   height: 100px;
-  z-index: 1; /* Behind nav and content */
+  z-index: 1;
+  /* Behind nav and content */
   pointer-events: none;
 }
 
@@ -77,15 +80,18 @@ body, html {
   width: 100%;
   z-index: 10;
 }
+
 .brand {
   font-weight: bold;
   font-size: 1.2rem;
   letter-spacing: 1px;
 }
+
 .nav-links {
   display: flex;
   align-items: center;
 }
+
 .nav-links a {
   color: white;
   text-decoration: none;
@@ -93,25 +99,17 @@ body, html {
   font-size: 0.95rem;
   transition: opacity 0.2s ease;
 }
+
 .nav-links a:hover {
   opacity: 0.8;
 }
+
 .icon {
   width: 18px;
   height: 18px;
   vertical-align: middle;
 }
 
-/* Text Container */
-.text-container {
-  position: absolute;
-  left: 50px;
-  bottom: 80px;
-}
-.text-container h1 {
-  font-size: 3rem;
-  font-weight: 600;
-}
 .subtitle {
   font-size: 0.9rem;
   letter-spacing: 0.4rem;
@@ -119,39 +117,44 @@ body, html {
   margin-top: 10px;
 }
 
+/* =================================== 
+  update
+=================================== */
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-/* Responsive for mobile */
-@media (max-width: 768px) {
-  .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .text-container {
-    bottom: 40px;
-    left: 20px;
-  }
-  .text-container h1 {
-    font-size: 2rem;
-  }
-  .nav-links {
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  .nav-links a {
-    margin: 10px 10px 0 0;
-  }
+.nav-links {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.nav-links a {
+  margin: 10px 10px 0 0;
+}
+
+/* ============================
+  content 
+=============================== */
+header .content{
+  width: 100%;
+  /* background-color:red ; */
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+
+
 .text-container {
-  position: absolute;
-  left: 50px;
-  bottom: 80px;
   background: rgba(0, 0, 0, 0.5);
   padding: 25px 35px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   max-width: 300px;
   width: fit-content;
-  z-index: 5;
 }
 
 .text-container h1 {
@@ -185,7 +188,8 @@ body, html {
   z-index: 999;
   display: flex;
   gap: 15px;
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent dark */
+  background: rgba(0, 0, 0, 0.5);
+  /* semi-transparent dark */
   padding: 10px 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 30px;
@@ -203,6 +207,7 @@ body, html {
   font-size: 0.9rem;
   transition: background 0.2s;
 }
+
 .device-switch button:hover {
   background: #333;
 }
@@ -257,15 +262,11 @@ body.mobile-mode {
 }
 
 .pdf-container {
-  position: absolute;
-  right: 50px;
-  bottom: 80px;
   background: rgba(0, 0, 0, 0.5);
   padding: 25px 35px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   width: 300px;
-  z-index: 5;
   color: white;
 }
 
@@ -283,8 +284,23 @@ body.mobile-mode {
   cursor: pointer;
   transition: transform 0.2s ease;
 }
+
 .download-icon:hover {
   transform: scale(1.1);
 }
 
+
+/* Responsive for mobile */
+@media (max-width: 700px) {
+  header {
+    background: url('../Resources/1690995093527.jpg') center center / cover no-repeat;
+  }
+  header .content{
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+  .pdf-file{
+    display: none;
+  }
 }
