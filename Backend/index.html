@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#101113" />
+  <title>Gallery Admin — Mina Wasfy</title>
+  <link rel="stylesheet" href="admin.css" />
+  <script src="admin_common.js" defer></script>
+  <script src="dashboard.js" defer></script>
+</head>
+
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <a class="brand" href="index.html" aria-label="Gallery admin home">MW<span>.</span></a>
+      <div class="admin-heading">
+        <p class="eyebrow">PRIVATE WORKSPACE</p>
+        <h1>Gallery admin</h1>
+        <p>Manage project titles and open a project to edit its details and images.</p>
+      </div>
+      <span class="branch-badge">Minawasfy.github.io · main</span>
+    </header>
+
+    <section class="admin-toolbar" aria-label="Project actions">
+      <div>
+        <h2>Your projects</h2>
+        <p id="project-count">Loading projects…</p>
+      </div>
+      <div class="toolbar-actions">
+        <a class="button button-secondary" href="edit.html?project=new">＋ Add project</a>
+        <button class="button button-commit" id="commit-button" type="button" hidden>Commit</button>
+      </div>
+    </section>
+
+    <p class="notice" id="admin-notice" role="status" hidden></p>
+    <div class="project-list" id="project-list" aria-live="polite">
+      <p class="empty-state">Loading your gallery…</p>
+    </div>
+
+    <footer class="admin-footer">
+      <span>This page is not linked from the public site.</span>
+      <a href="README.txt">Admin setup notes</a>
+    </footer>
+  </main>
+
+  <dialog class="commit-dialog" id="commit-dialog">
+    <div class="dialog-card">
+      <p class="eyebrow">CONFIRM CHANGES</p>
+      <h2>Commit to main?</h2>
+      <p id="commit-summary">Your project changes will be committed to the live site.</p>
+      <label class="field-label" for="github-token">Fine-grained GitHub token</label>
+      <input id="github-token" name="github-token" type="password" autocomplete="new-password"
+        placeholder="Enter token with Contents read/write" />
+      <p class="field-hint">The token is used for this commit only and is never saved by this page.</p>
+      <p class="dialog-error" id="commit-error" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button class="button button-secondary" id="cancel-commit" type="button">Cancel</button>
+        <button class="button button-commit" id="confirm-commit" type="button">Confirm commit</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+
+</html>

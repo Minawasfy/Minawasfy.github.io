@@ -1,46 +1,57 @@
-   const GITHUB_API_URL = 'https://api.github.com/repos/Minawasfy/Minawasfy.github.io/contents/Photos'; // change this
+async function loadImages() {
+  const gallery = document.getElementById('gallery');
 
+  try {
+    const [projects, imageUrls] = await Promise.all([
+      window.portfolioProjectsPromise,
+      window.fetchPortfolioImageUrls()
+    ]);
+    const projectImageNames = projects.flatMap(project => project.images);
+    const missingImages = projectImageNames.filter(name => !imageUrls.has(name));
 
-
-  async function loadImages() {
-    try {
-      const response = await fetch(GITHUB_API_URL);
-      const files = await response.json();
-
-      const imageFiles = files.filter(file =>
-        file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)
-      );
-
-      const gallery = document.getElementById('gallery');
-      gallery.innerHTML = '';
-
-      const row = document.createElement('div');
-      row.className = 'row';
-
-      imageFiles.forEach(file => {
-        const column = document.createElement('div');
-        column.className = 'column';
-
-        const img = document.createElement('img');
-        img.src = file.download_url;
-        img.alt = file.name;
-        img.style.width = '100%';
-
-        column.appendChild(img);
-        row.appendChild(column);
-      });
-
-      gallery.appendChild(row);
-
-      if (imageFiles.length === 0) {
-        gallery.innerHTML = '<p style="padding:20px;">No images found.</p>';
-      }
-
-    } catch (err) {
-      console.error('Error loading images:', err);
-      document.getElementById('gallery').innerHTML =
-        '<p style="padding:20px;">Failed to load images. Check console for details.</p>';
+    if (missingImages.length > 0) {
+      throw new Error(`Project images not found: ${missingImages.join(', ')}`);
     }
-  }
 
-  loadImages();
+    gallery.replaceChildren();
+
+    projects.forEach(project => {
+      const coverName = project.images[0];
+      const figure = document.createElement('figure');
+      figure.className = 'gallery-item';
+
+      const link = document.createElement('a');
+      link.href = `project.html?project=${encodeURIComponent(project.id)}`;
+      link.setAttribute('aria-label', `View ${project.title}`);
+
+      const image = document.createElement('img');
+      image.src = imageUrls.get(coverName);
+      image.alt = `${project.title} — project preview`;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.addEventListener('error', () => figure.remove(), { once: true });
+
+      const caption = document.createElement('figcaption');
+      caption.textContent = project.title;
+
+      link.appendChild(image);
+      figure.append(link, caption);
+      gallery.appendChild(figure);
+    });
+
+    if (projects.length === 0) {
+      const message = document.createElement('p');
+      message.className = 'gallery-message';
+      message.textContent = 'No projects are available right now.';
+      gallery.appendChild(message);
+    }
+  } catch (error) {
+    console.error('Error loading portfolio images:', error);
+    const message = document.createElement('p');
+    message.className = 'gallery-message';
+    message.textContent = 'The gallery could not be loaded. Please try again later.';
+    gallery.replaceChildren(message);
+  }
+}
+
+loadImages();
