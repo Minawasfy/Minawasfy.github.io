@@ -99,7 +99,7 @@
     "id": "asterius",
     "title": "Asterius (Hades Character)",
     "date": "2025-11-09",
-    "description": "Not specified",
+    "description": "This is a Boss from a game called Hades; sculpted and textured and rendered using unreal engine",
     "links": [],
     "models": [],
     "images": [
@@ -107,7 +107,21 @@
       "Screenshot_238.png",
       "Screenshot_239.png"
     ],
-    "clips": []
+    "clips": [],
+    "showcase": [
+      {
+        "type": "image",
+        "name": "Screenshot_237.png"
+      },
+      {
+        "type": "image",
+        "name": "Screenshot_238.png"
+      },
+      {
+        "type": "image",
+        "name": "Screenshot_239.png"
+      }
+    ]
   },
   {
     "id": "game-ready-car-engine",
