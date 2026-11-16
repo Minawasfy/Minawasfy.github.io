@@ -6,7 +6,21 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_57.png", "Screenshot_61.png"]
+    "images": [
+      "Screenshot_61.png",
+      "Screenshot_57.png"
+    ],
+    "clips": [],
+    "showcase": [
+      {
+        "type": "image",
+        "name": "Screenshot_61.png"
+      },
+      {
+        "type": "image",
+        "name": "Screenshot_57.png"
+      }
+    ]
   },
   {
     "id": "scary-light-house",
@@ -15,7 +29,14 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_278.png", "Screenshot_279.png", "Screenshot_240.png", "Screenshot_241.png", "Screenshot_242.png"]
+    "images": [
+      "Screenshot_278.png",
+      "Screenshot_279.png",
+      "Screenshot_240.png",
+      "Screenshot_241.png",
+      "Screenshot_242.png"
+    ],
+    "clips": []
   },
   {
     "id": "vine-foliage",
@@ -24,7 +45,14 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_310.png", "Screenshot_309.png", "Screenshot_300.png", "Screenshot_299.png", "Screenshot_290 (2).png"]
+    "images": [
+      "Screenshot_310.png",
+      "Screenshot_309.png",
+      "Screenshot_300.png",
+      "Screenshot_299.png",
+      "Screenshot_290 (2).png"
+    ],
+    "clips": []
   },
   {
     "id": "organic-sculpted-rocks",
@@ -33,7 +61,10 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_298.png"]
+    "images": [
+      "Screenshot_298.png"
+    ],
+    "clips": []
   },
   {
     "id": "vi-gauntlets",
@@ -61,7 +92,8 @@
       "Screenshot_274.png",
       "Screenshot_275.png",
       "Screenshot_276.png"
-    ]
+    ],
+    "clips": []
   },
   {
     "id": "asterius",
@@ -70,7 +102,12 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_237.png", "Screenshot_238.png", "Screenshot_239.png"]
+    "images": [
+      "Screenshot_237.png",
+      "Screenshot_238.png",
+      "Screenshot_239.png"
+    ],
+    "clips": []
   },
   {
     "id": "game-ready-car-engine",
@@ -79,7 +116,12 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_268.png", "Screenshot_269.png", "Screenshot_270.png"]
+    "images": [
+      "Screenshot_268.png",
+      "Screenshot_269.png",
+      "Screenshot_270.png"
+    ],
+    "clips": []
   },
   {
     "id": "game-ready-shell-axe",
@@ -88,7 +130,12 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_64.png", "Screenshot_65.png", "Screenshot_66.png"]
+    "images": [
+      "Screenshot_64.png",
+      "Screenshot_65.png",
+      "Screenshot_66.png"
+    ],
+    "clips": []
   },
   {
     "id": "arabian-style-door",
@@ -97,7 +144,11 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_184.png", "Screenshot_187.png"]
+    "images": [
+      "Screenshot_184.png",
+      "Screenshot_187.png"
+    ],
+    "clips": []
   },
   {
     "id": "toyota-car",
@@ -106,6 +157,9 @@
     "description": "Not specified",
     "links": [],
     "models": [],
-    "images": ["Screenshot_193.png"]
+    "images": [
+      "Screenshot_193.png"
+    ],
+    "clips": []
   }
 ]
