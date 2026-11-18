@@ -1,8 +1,26 @@
 (() => {
   const svgNamespace = 'http://www.w3.org/2000/svg';
-  const artstationIconUrl = new URL('../Resources/artstation%20(1).png', document.currentScript.src).href;
   const platforms = {
-    artstation: { label: 'ArtStation' },
+    artstation: {
+      label: 'ArtStation',
+      paths: [
+        {
+          d: 'M0 17.72L2.34 21.70L2.91 22.17L3.56 22.45L17.58 22.50L14.81 17.72Z',
+          fill: '#00B0F2',
+          stroke: 'none'
+        },
+        {
+          d: 'M7.41 4.88L2.02 14.25L12.80 14.25Z',
+          fill: '#00B0F2',
+          stroke: 'none'
+        },
+        {
+          d: 'M9.42 1.45L21.56 22.45L23.86 18.47L23.95 18.09L23.91 17.16L23.58 16.41L15.80 2.86L15.05 1.92L14.20 1.50Z',
+          fill: '#00B0F2',
+          stroke: 'none'
+        }
+      ]
+    },
     sketchfab: {
       label: 'Sketchfab',
       paths: [
@@ -49,15 +67,6 @@
 
   function createIcon(platform) {
     const selectedPlatform = platformFor({ platform });
-    if (selectedPlatform === 'artstation') {
-      const icon = document.createElement('img');
-      icon.setAttribute('class', 'portfolio-link-icon project-link-icon');
-      icon.src = artstationIconUrl;
-      icon.alt = '';
-      icon.setAttribute('aria-hidden', 'true');
-      return icon;
-    }
-
     const icon = document.createElementNS(svgNamespace, 'svg');
     icon.setAttribute('class', 'portfolio-link-icon project-link-icon');
     icon.setAttribute('viewBox', '0 0 24 24');
