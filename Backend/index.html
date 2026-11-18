@@ -48,18 +48,41 @@
   </main>
 
   <dialog class="commit-dialog" id="commit-dialog">
-    <div class="dialog-card">
-      <p class="eyebrow">CONFIRM CHANGES</p>
-      <h2>Commit to main?</h2>
+    <div class="dialog-card commit-dialog-card">
+      <p class="eyebrow">UPLOAD &amp; COMMIT</p>
+      <h2>Review changes</h2>
       <p id="commit-summary">Your project changes will be committed to the live site.</p>
-      <label class="field-label" for="github-token">Fine-grained GitHub token</label>
-      <input id="github-token" name="github-token" type="password" autocomplete="new-password"
-        placeholder="Enter token with Contents read/write" />
-      <p class="field-hint">The token is used for this commit only and is never saved by this page.</p>
+      <div class="commit-upload-list" id="commit-upload-list" aria-live="polite">
+        <article class="commit-file-row commit-file-required" id="project-data-row">
+          <div class="commit-file-info">
+            <div class="commit-file-heading">
+              <strong>Project data</strong>
+              <span class="commit-file-state" id="project-data-status">Waiting</span>
+            </div>
+            <small>Data/projects.json · required</small>
+            <div class="commit-progress-line">
+              <progress id="project-data-progress" max="100" value="0" aria-label="Project data upload progress"></progress>
+              <span id="project-data-percent">0%</span>
+              <button class="button button-secondary button-small commit-retry" id="project-data-retry"
+                type="button" aria-label="Retry project data upload" title="Retry project data upload" hidden>↻</button>
+            </div>
+          </div>
+        </article>
+        <div id="commit-file-list"></div>
+      </div>
+      <p class="field-hint">Uncheck a file to leave it out of this commit. A glTF model is included only when its main file and every referenced dependency are included successfully.</p>
+      <div class="commit-token-section">
+        <label class="field-label" for="github-token">Fine-grained GitHub token</label>
+        <input id="github-token" name="github-token" type="password" autocomplete="new-password"
+          placeholder="Enter token with Contents read/write" />
+        <p class="field-hint">The token is used for this commit only and is never saved by this page.</p>
+      </div>
+      <p class="commit-status" id="commit-status" role="status" aria-live="polite"></p>
       <p class="dialog-error" id="commit-error" role="alert" hidden></p>
       <div class="dialog-actions">
         <button class="button button-secondary" id="cancel-commit" type="button">Cancel</button>
-        <button class="button button-commit" id="confirm-commit" type="button">Confirm commit</button>
+        <button class="button button-secondary" id="start-upload" type="button">Upload files</button>
+        <button class="button button-commit" id="confirm-commit" type="button" hidden disabled>Commit selected uploads</button>
       </div>
     </div>
   </dialog>
