@@ -189,9 +189,9 @@
     ],
     "models": [
       {
-        "src": "Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb",
+        "src": "Gallery Resources/Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb",
         "assets": [
-          "Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb"
+          "Gallery Resources/Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb"
         ],
         "poster": ""
       }
@@ -211,18 +211,18 @@
     "clips": [
       {
         "type": "video",
-        "src": "Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4",
+        "src": "Gallery Resources/Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4",
         "poster": "cybernetic-sphere-scene-1794992343072-0-thumbnail-with-unity-logo.png"
       }
     ],
     "showcase": [
       {
         "type": "video",
-        "src": "Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4"
+        "src": "Gallery Resources/Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4"
       },
       {
         "type": "model",
-        "src": "Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb"
+        "src": "Gallery Resources/Models/cybernetic-sphere-scene-1794998112010-d7ib8/Cybernetic Sphere Scene.glb"
       },
       {
         "type": "image",

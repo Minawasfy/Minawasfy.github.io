@@ -10,9 +10,9 @@ To commit changes:
 4. The upload window shows progress and inclusion controls for each new file. Retry failed uploads with the retry button, or uncheck files to exclude them from this commit. Only successful, selected files are committed. If there are no new media files, the dialog commits project data directly; existing media is not uploaded again. If a glTF dependency is excluded, its model is left out of the project data.
 5. Commits are made directly to the main branch. GitHub Pages may take a short time to publish them.
 
-Project links can be assigned to ArtStation, Sketchfab, itch.io, or Other website. Other links require a custom label; the selected icon and name are displayed beside the URL on the project page.
+Project links can be assigned to ArtStation, Sketchfab, itch.io, or Other website using the expandable platform checklist. Choose one platform per URL; Other links require a custom label. The selected icon and name are displayed beside the URL on the project page.
 
-Project data is stored in Data/projects.json. Screenshots are stored in Photos; 3D model files and their glTF dependencies are stored under Models; videos and GIFs are stored under Videos.
+Project data is stored in Data/projects.json. Gallery media is organized under Gallery Resources: screenshots in Pictures, 3D models and their glTF dependencies in Models, and videos or GIFs in Videos.
 
 To add a 3D model:
 1. Add its screenshots in the project editor.

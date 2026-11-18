@@ -1,16 +1,8 @@
 (() => {
   const svgNamespace = 'http://www.w3.org/2000/svg';
+  const artstationIconUrl = new URL('../Resources/artstation%20(1).png', document.currentScript.src).href;
   const platforms = {
-    artstation: {
-      label: 'ArtStation',
-      paths: [
-        {
-          d: 'M12 3 2 21h5.1l1.5-3h6.8l1.5 3H22L12 3Zm0 7.1 2.3 4.4H9.7l2.3-4.4Z',
-          fill: 'currentColor',
-          'fill-rule': 'evenodd'
-        }
-      ]
-    },
+    artstation: { label: 'ArtStation' },
     sketchfab: {
       label: 'Sketchfab',
       paths: [
@@ -57,8 +49,17 @@
 
   function createIcon(platform) {
     const selectedPlatform = platformFor({ platform });
+    if (selectedPlatform === 'artstation') {
+      const icon = document.createElement('img');
+      icon.setAttribute('class', 'portfolio-link-icon project-link-icon');
+      icon.src = artstationIconUrl;
+      icon.alt = '';
+      icon.setAttribute('aria-hidden', 'true');
+      return icon;
+    }
+
     const icon = document.createElementNS(svgNamespace, 'svg');
-    icon.setAttribute('class', 'portfolio-link-icon');
+    icon.setAttribute('class', 'portfolio-link-icon project-link-icon');
     icon.setAttribute('viewBox', '0 0 24 24');
     icon.setAttribute('fill', 'none');
     icon.setAttribute('stroke', 'currentColor');

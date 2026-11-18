@@ -285,8 +285,14 @@ a {
   list-style: none;
 }
 
+.project-links li {
+  min-width: 0;
+}
+
 .project-links a {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
+  min-width: 0;
   align-items: center;
   gap: 9px;
   color: #d6d3cd;
@@ -298,15 +304,18 @@ a {
 .project-link-icon {
   width: 20px;
   height: 20px;
-  flex: none;
+  flex: 0 0 20px;
+  object-fit: contain;
 }
 
 .project-link-label {
+  flex: 1 1 auto;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
 .project-link-external {
+  flex: none;
   color: var(--muted);
   font-size: 0.78rem;
 }

@@ -16,6 +16,7 @@ const clipUpload = document.getElementById('clip-upload');
 const commitButton = document.getElementById('commit-button');
 const notice = document.getElementById('admin-notice');
 const errorNotice = document.getElementById('editor-error');
+const galleryResourcePaths = window.AdminCommon.galleryResourcePaths;
 let originalProjects = [];
 let originalProject = null;
 let draftProject = null;
@@ -26,6 +27,11 @@ let ready = false;
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function getGalleryPictureUrl(name) {
+  const picturePath = encodeURI(galleryResourcePaths.pictures);
+  return new URL(`../${picturePath}/${encodeURIComponent(name)}`, document.baseURI).href;
 }
 
 function normalizeProject(project) {
@@ -169,11 +175,30 @@ function renderLinks() {
     row.className = 'link-row';
 
     const platform = window.PortfolioLinkUtils.platformFor(link);
-    const choices = document.createElement('fieldset');
+    const selector = document.createElement('details');
+    selector.className = 'link-platform-selector';
+    const trigger = document.createElement('summary');
+    trigger.className = 'link-platform-trigger';
+    const platformName = document.createElement('span');
+    const caret = document.createElement('span');
+    caret.className = 'link-platform-caret';
+    caret.setAttribute('aria-hidden', 'true');
+    caret.textContent = '⌄';
+    const updatePlatformTrigger = selectedPlatform => {
+      platformName.textContent = window.PortfolioLinkUtils.labelFor(selectedPlatform);
+      trigger.setAttribute('aria-label', `Link ${index + 1} platform: ${platformName.textContent}`);
+      trigger.replaceChildren(
+        window.PortfolioLinkUtils.createIcon(selectedPlatform),
+        platformName,
+        caret
+      );
+    };
+    updatePlatformTrigger(platform);
+
+    const choices = document.createElement('div');
     choices.className = 'link-platform-choices';
-    const legend = document.createElement('legend');
-    legend.textContent = 'Platform';
-    choices.appendChild(legend);
+    choices.setAttribute('role', 'group');
+    choices.setAttribute('aria-label', `Platform options for link ${index + 1}`);
 
     const label = document.createElement('input');
     label.type = 'text';
@@ -231,6 +256,8 @@ function renderLinks() {
         choices.querySelectorAll('.link-platform-choice').forEach(choice => {
           choice.classList.toggle('is-selected', choice.querySelector('input').checked);
         });
+        updatePlatformTrigger(value);
+        selector.open = false;
         label.value = currentLink.label;
         label.hidden = value !== 'other';
         clearEditorError();
@@ -238,6 +265,7 @@ function renderLinks() {
       });
       choices.appendChild(option);
     });
+    selector.append(trigger, choices);
 
     const remove = document.createElement('button');
     remove.type = 'button';
@@ -252,7 +280,7 @@ function renderLinks() {
     const fields = document.createElement('div');
     fields.className = 'link-fields';
     fields.append(label, url, remove);
-    row.append(choices, fields);
+    row.append(selector, fields);
     linkEditor.appendChild(row);
   });
 }
@@ -291,7 +319,7 @@ function renderImages() {
       draftProject.showcase = draftProject.showcase.filter(item =>
         item.type !== 'image' || item.name !== name
       );
-      const path = `Photos/${name}`;
+      const path = `${galleryResourcePaths.pictures}/${name}`;
       uploads.delete(path);
       if (objectUrls.has(path)) {
         URL.revokeObjectURL(objectUrls.get(path));
@@ -350,7 +378,7 @@ function renderModels() {
       viewer.setAttribute('loading', 'lazy');
       viewer.setAttribute('shadow-intensity', '1');
       if (model.poster) {
-        viewer.setAttribute('poster', photoUrls.get(model.poster) || `../Photos/${model.poster}`);
+        viewer.setAttribute('poster', photoUrls.get(model.poster) || getGalleryPictureUrl(model.poster));
       }
       card.appendChild(viewer);
     }
@@ -374,7 +402,7 @@ function renderModels() {
       const viewer = card.querySelector('model-viewer');
       if (viewer) {
         if (model.poster) {
-          viewer.setAttribute('poster', photoUrls.get(model.poster) || `../Photos/${model.poster}`);
+          viewer.setAttribute('poster', photoUrls.get(model.poster) || getGalleryPictureUrl(model.poster));
         } else {
           viewer.removeAttribute('poster');
         }
@@ -398,7 +426,7 @@ function renderModels() {
         ...(item.assets || [])
       ]));
       [...uploads.keys()]
-        .filter(path => path.startsWith('Models/') && !usedModelFiles.has(path))
+        .filter(path => path.startsWith(`${galleryResourcePaths.models}/`) && !usedModelFiles.has(path))
         .forEach(path => {
           uploads.delete(path);
           if (objectUrls.has(path)) {
@@ -448,7 +476,7 @@ function renderClips() {
       preview.playsInline = true;
       preview.preload = 'metadata';
       if (clip.poster) {
-        preview.poster = photoUrls.get(clip.poster) || `../Photos/${clip.poster}`;
+        preview.poster = photoUrls.get(clip.poster) || getGalleryPictureUrl(clip.poster);
       }
       card.appendChild(preview);
     }
@@ -472,7 +500,7 @@ function renderClips() {
       const preview = card.querySelector('video');
       if (preview) {
         if (clip.poster) {
-          preview.poster = photoUrls.get(clip.poster) || `../Photos/${clip.poster}`;
+          preview.poster = photoUrls.get(clip.poster) || getGalleryPictureUrl(clip.poster);
         } else {
           preview.removeAttribute('poster');
         }
@@ -684,7 +712,7 @@ imageUpload.addEventListener('change', () => {
       suffix += 1;
     }
     const previewUrl = URL.createObjectURL(file);
-    const path = `Photos/${name}`;
+    const path = `${galleryResourcePaths.pictures}/${name}`;
     uploads.set(path, file);
     objectUrls.set(path, previewUrl);
     photoUrls.set(name, previewUrl);
@@ -738,7 +766,7 @@ function addModelFiles(fileList, fromFolder) {
     const folder = `${window.AdminCommon.slugifyProjectTitle(titleInput.value)}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const packageFiles = files.map(file => ({
       file,
-      path: `Models/${folder}/${getModelRelativePath(file, fromFolder)}`
+      path: `${galleryResourcePaths.models}/${folder}/${getModelRelativePath(file, fromFolder)}`
     }));
     const paths = packageFiles.map(item => item.path);
     if (new Set(paths).size !== paths.length || paths.some(path => uploads.has(path))) {
@@ -800,7 +828,7 @@ clipUpload.addEventListener('change', () => {
 
   const folder = `${window.AdminCommon.slugifyProjectTitle(titleInput.value)}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   files.forEach((file, index) => {
-    const path = `Videos/${folder}/${createClipFilename(file, index)}`;
+    const path = `${galleryResourcePaths.videos}/${folder}/${createClipFilename(file, index)}`;
     const type = /\.gif$/i.test(file.name) ? 'gif' : 'video';
     const clip = { type, src: path, poster: '' };
     uploads.set(path, file);
@@ -819,7 +847,7 @@ document.getElementById('add-link').addEventListener('click', () => {
   draftProject.links.push({ platform: 'other', label: '', url: '' });
   renderLinks();
   updateCommitButton();
-  linkEditor.lastElementChild?.querySelector('input')?.focus();
+  linkEditor.lastElementChild?.querySelector('summary')?.focus();
 });
 
 titleInput.addEventListener('input', onProjectFieldsChange);

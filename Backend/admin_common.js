@@ -3,6 +3,11 @@ const GITHUB_REPOSITORY = 'Minawasfy.github.io';
 const GITHUB_BRANCH = 'main';
 const GITHUB_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPOSITORY}`;
 const PROJECTS_PATH = 'Data/projects.json';
+const GALLERY_RESOURCE_PATHS = Object.freeze({
+  pictures: 'Gallery Resources/Pictures',
+  models: 'Gallery Resources/Models',
+  videos: 'Gallery Resources/Videos'
+});
 
 async function githubRequest(path, { token, method = 'GET', body } = {}) {
   const headers = {
@@ -51,7 +56,8 @@ async function loadProjectCatalog() {
 }
 
 async function loadPhotoFiles() {
-  const files = await githubRequest(`/contents/Photos?ref=${GITHUB_BRANCH}`);
+  const picturePath = encodeURI(GALLERY_RESOURCE_PATHS.pictures);
+  const files = await githubRequest(`/contents/${picturePath}?ref=${GITHUB_BRANCH}`);
   if (!Array.isArray(files)) {
     throw new Error('GitHub returned an unsupported photo list.');
   }
@@ -99,7 +105,7 @@ function validateProjects(projects) {
     (project.models || []).forEach((model, modelIndex) => {
       const validModelPath = path =>
         typeof path === 'string' &&
-        path.startsWith('Models/') &&
+        path.startsWith(`${GALLERY_RESOURCE_PATHS.models}/`) &&
         !path.includes('\\') &&
         path.split('/').slice(1).every(part => part && part !== '.' && part !== '..');
       if (!model || !validModelPath(model.src) || !/\.(glb|gltf)$/i.test(model.src)) {
@@ -117,7 +123,7 @@ function validateProjects(projects) {
     (project.clips || []).forEach((clip, clipIndex) => {
       const validClipPath = path =>
         typeof path === 'string' &&
-        path.startsWith('Videos/') &&
+        path.startsWith(`${GALLERY_RESOURCE_PATHS.videos}/`) &&
         !path.includes('\\') &&
         path.split('/').slice(1).every(part => part && part !== '.' && part !== '..');
       const validType = clip?.type === 'video' || clip?.type === 'gif';
@@ -176,7 +182,7 @@ function validateProjects(projects) {
 }
 
 function projectAssetPaths(project) {
-  const screenshots = (project.images || []).map(name => `Photos/${name}`);
+  const screenshots = (project.images || []).map(name => `${GALLERY_RESOURCE_PATHS.pictures}/${name}`);
   const models = (project.models || []).flatMap(model => [
     model.src,
     ...(Array.isArray(model.assets) ? model.assets : [])
@@ -237,7 +243,9 @@ function createBlobWithProgress(token, content, encoding, onProgress) {
 function filterProjectsForSelectedUploads(projects, stagedPaths, selectedPaths) {
   const isAvailable = path => !stagedPaths.has(path) || selectedPaths.has(path);
   return projects.map(project => {
-    const images = project.images.filter(name => isAvailable(`Photos/${name}`));
+    const images = project.images.filter(name =>
+      isAvailable(`${GALLERY_RESOURCE_PATHS.pictures}/${name}`)
+    );
     const models = (project.models || [])
       .filter(model => {
         const requiredFiles = model.assets?.length ? model.assets : [model.src];
@@ -717,6 +725,7 @@ function setupCommitDialog(getChanges, onSuccess) {
 
 window.AdminCommon = {
   GITHUB_BRANCH,
+  galleryResourcePaths: GALLERY_RESOURCE_PATHS,
   loadProjectCatalog,
   loadPhotoFiles,
   projectAssetPaths,

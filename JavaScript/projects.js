@@ -13,10 +13,11 @@ window.portfolioProjectsPromise = fetch('Data/projects.json', { cache: 'no-store
 window.fetchPortfolioImageUrls = async function () {
   const projects = await window.portfolioProjectsPromise;
   const imageNames = new Set(projects.flatMap(project => project.images));
+  const picturePath = encodeURI('Gallery Resources/Pictures');
   return new Map(
     [...imageNames].map(name => [
       name,
-      new URL(`Photos/${encodeURIComponent(name)}`, document.baseURI).href
+      new URL(`${picturePath}/${encodeURIComponent(name)}`, document.baseURI).href
     ])
   );
 };
