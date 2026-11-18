@@ -5,9 +5,43 @@ const GITHUB_API = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPOSI
 const PROJECTS_PATH = 'Data/projects.json';
 const GALLERY_RESOURCE_PATHS = Object.freeze({
   pictures: 'Gallery Resources/Pictures',
-  models: 'Gallery Resources/Models',
-  videos: 'Gallery Resources/Videos'
+  models: 'Gallery Resources/models',
+  videos: 'Gallery Resources/videos'
 });
+
+function encodePathSegments(path) {
+  return path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+}
+
+function slugifyProjectTitle(title) {
+  const slug = String(title || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return slug || 'new-project';
+}
+
+function projectFolderName(title) {
+  const folder = String(title || '')
+    .trim()
+    .normalize('NFC')
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
+    .replace(/[. ]+$/g, '');
+  if (!folder || /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(folder)) {
+    return `project-${slugifyProjectTitle(title)}`;
+  }
+  return folder;
+}
+
+function isSafeRelativeAssetPath(path, root) {
+  if (typeof path !== 'string' || !path.startsWith(`${root}/`) || path.includes('\\')) {
+    return false;
+  }
+  const parts = path.slice(root.length + 1).split('/');
+  return parts.length >= 2 && parts.every(part => part && part !== '.' && part !== '..');
+}
 
 async function githubRequest(path, { token, method = 'GET', body } = {}) {
   const headers = {
@@ -55,17 +89,21 @@ async function loadProjectCatalog() {
   return projects;
 }
 
-async function loadPhotoFiles() {
-  const picturePath = encodeURI(GALLERY_RESOURCE_PATHS.pictures);
-  const files = await githubRequest(`/contents/${picturePath}?ref=${GITHUB_BRANCH}`);
-  if (!Array.isArray(files)) {
-    throw new Error('GitHub returned an unsupported photo list.');
-  }
-  return new Map(
-    files
+async function loadPhotoFiles(projects) {
+  const folders = new Set((projects || []).flatMap(project =>
+    (project.images || []).map(path => path.split('/')[0])
+  ));
+  const folderFiles = await Promise.all([...folders].map(async folder => {
+    const picturePath = encodePathSegments(`${GALLERY_RESOURCE_PATHS.pictures}/${folder}`);
+    const files = await githubRequest(`/contents/${picturePath}?ref=${GITHUB_BRANCH}`);
+    if (!Array.isArray(files)) {
+      throw new Error(`GitHub returned an unsupported photo list for "${folder}".`);
+    }
+    return files
       .filter(file => file.type === 'file' && file.name && file.download_url && /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name))
-      .map(file => [file.name, file.download_url])
-  );
+      .map(file => [`${folder}/${file.name}`, file.download_url]);
+  }));
+  return new Map(folderFiles.flat());
 }
 
 function validateProjects(projects) {
@@ -75,6 +113,7 @@ function validateProjects(projects) {
 
   const ids = new Set();
   const titles = new Set();
+  const mediaFolders = new Set();
   projects.forEach((project, index) => {
     const title = project.title?.trim();
     const normalizedTitle = title?.toLocaleLowerCase();
@@ -93,21 +132,27 @@ function validateProjects(projects) {
         (project.clips !== undefined && !Array.isArray(project.clips))) {
       throw new Error(`Project "${title}" has invalid media or showcase data.`);
     }
-    if (project.images.some(name => typeof name !== 'string' || !name || name.includes('/') || name.includes('\\') || name === '.' || name === '..')) {
-      throw new Error(`Project "${title}" has an invalid screenshot filename.`);
+    if (project.images.some(path => !isSafeRelativeAssetPath(`${GALLERY_RESOURCE_PATHS.pictures}/${path}`, GALLERY_RESOURCE_PATHS.pictures) ||
+        path.split('/').length !== 2)) {
+      throw new Error(`Project "${title}" has an invalid screenshot path.`);
     }
     if (project.images.length === 0) {
       throw new Error(`Project "${title}" needs at least one screenshot for its gallery cover.`);
     }
+    const mediaFolder = project.images[0].split('/')[0];
+    if (project.images.some(path => path.split('/')[0] !== mediaFolder)) {
+      throw new Error(`Project "${title}" screenshots must use one project folder.`);
+    }
+    const normalizedMediaFolder = mediaFolder.toLocaleLowerCase();
+    if (mediaFolders.has(normalizedMediaFolder)) {
+      throw new Error(`Project "${title}" shares a media folder with another project.`);
+    }
 
     ids.add(project.id);
     titles.add(normalizedTitle);
+    mediaFolders.add(normalizedMediaFolder);
     (project.models || []).forEach((model, modelIndex) => {
-      const validModelPath = path =>
-        typeof path === 'string' &&
-        path.startsWith(`${GALLERY_RESOURCE_PATHS.models}/`) &&
-        !path.includes('\\') &&
-        path.split('/').slice(1).every(part => part && part !== '.' && part !== '..');
+      const validModelPath = path => isSafeRelativeAssetPath(path, GALLERY_RESOURCE_PATHS.models);
       if (!model || !validModelPath(model.src) || !/\.(glb|gltf)$/i.test(model.src)) {
         throw new Error(`Project "${title}" has an invalid 3D model in entry ${modelIndex + 1}.`);
       }
@@ -121,11 +166,7 @@ function validateProjects(projects) {
     });
     const clipSources = new Set();
     (project.clips || []).forEach((clip, clipIndex) => {
-      const validClipPath = path =>
-        typeof path === 'string' &&
-        path.startsWith(`${GALLERY_RESOURCE_PATHS.videos}/`) &&
-        !path.includes('\\') &&
-        path.split('/').slice(1).every(part => part && part !== '.' && part !== '..');
+      const validClipPath = path => isSafeRelativeAssetPath(path, GALLERY_RESOURCE_PATHS.videos);
       const validType = clip?.type === 'video' || clip?.type === 'gif';
       const validExtension = clip?.type === 'gif'
         ? /\.gif$/i.test(clip.src)
@@ -726,17 +767,11 @@ function setupCommitDialog(getChanges, onSuccess) {
 window.AdminCommon = {
   GITHUB_BRANCH,
   galleryResourcePaths: GALLERY_RESOURCE_PATHS,
+  encodePathSegments,
   loadProjectCatalog,
   loadPhotoFiles,
   projectAssetPaths,
-  slugifyProjectTitle(title) {
-    const slug = title
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-    return slug || 'new-project';
-  },
+  projectFolderName,
+  slugifyProjectTitle,
   setupCommitDialog
 };

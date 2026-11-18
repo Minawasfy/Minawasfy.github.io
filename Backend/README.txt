@@ -12,7 +12,7 @@ To commit changes:
 
 Project links can be assigned to ArtStation, Sketchfab, itch.io, or Other website using the expandable platform checklist. Choose one platform per URL; Other links require a custom label. The selected icon and name are displayed beside the URL on the project page.
 
-Project data is stored in Data/projects.json. Gallery media is organized under Gallery Resources: screenshots in Pictures, 3D models and their glTF dependencies in Models, and videos or GIFs in Videos.
+Project data is stored in Data/projects.json. Gallery media is organized under Gallery Resources by type and project: screenshots in Pictures/<project title>, 3D models and their glTF dependencies in models/<project title>, and videos or GIFs in videos/<project title>. Model and video upload batches are kept inside their project folders.
 
 To add a 3D model:
 1. Add its screenshots in the project editor.

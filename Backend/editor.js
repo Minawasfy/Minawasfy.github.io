@@ -23,6 +23,7 @@ let draftProject = null;
 let photoUrls = new Map();
 let uploads = new Map();
 let objectUrls = new Map();
+let projectMediaFolderName = '';
 let ready = false;
 
 function clone(value) {
@@ -30,8 +31,17 @@ function clone(value) {
 }
 
 function getGalleryPictureUrl(name) {
-  const picturePath = encodeURI(galleryResourcePaths.pictures);
-  return new URL(`../${picturePath}/${encodeURIComponent(name)}`, document.baseURI).href;
+  const picturePath = window.AdminCommon.encodePathSegments(
+    `${galleryResourcePaths.pictures}/${name}`
+  );
+  return new URL(`../${picturePath}`, document.baseURI).href;
+}
+
+function getProjectMediaFolderName() {
+  if (!projectMediaFolderName) {
+    projectMediaFolderName = window.AdminCommon.projectFolderName(titleInput.value);
+  }
+  return projectMediaFolderName;
 }
 
 function normalizeProject(project) {
@@ -296,19 +306,20 @@ function renderImages() {
   }
 
   draftProject.images.forEach(name => {
+    const filenameText = name.split('/').pop();
     const card = document.createElement('article');
     card.className = 'image-card';
 
     const image = document.createElement('img');
     image.src = photoUrls.get(name) || '';
-    image.alt = `${draftProject.title || 'Project'} — ${name}`;
+    image.alt = `${draftProject.title || 'Project'} — ${filenameText}`;
     image.loading = 'lazy';
 
     const footer = document.createElement('div');
     footer.className = 'image-card-footer';
     const filename = document.createElement('span');
     filename.className = 'image-name';
-    filename.textContent = name;
+    filename.textContent = filenameText;
 
     const remove = document.createElement('button');
     remove.type = 'button';
@@ -395,7 +406,9 @@ function renderModels() {
     const posterSelect = document.createElement('select');
     posterSelect.setAttribute('aria-label', `Poster screenshot for ${filename.textContent}`);
     posterSelect.add(new Option('No poster', ''));
-    draftProject.images.forEach(name => posterSelect.add(new Option(name, name)));
+    draftProject.images.forEach(name =>
+      posterSelect.add(new Option(name.split('/').pop(), name))
+    );
     posterSelect.value = model.poster || '';
     posterSelect.addEventListener('change', () => {
       model.poster = posterSelect.value;
@@ -493,7 +506,9 @@ function renderClips() {
     const posterSelect = document.createElement('select');
     posterSelect.setAttribute('aria-label', `Poster screenshot for ${filename.textContent}`);
     posterSelect.add(new Option('No poster', ''));
-    draftProject.images.forEach(name => posterSelect.add(new Option(name, name)));
+    draftProject.images.forEach(name =>
+      posterSelect.add(new Option(name.split('/').pop(), name))
+    );
     posterSelect.value = clip.poster || '';
     posterSelect.addEventListener('change', () => {
       clip.poster = posterSelect.value;
@@ -552,7 +567,7 @@ function renderShowcaseOrder() {
     const model = isModel ? draftProject.models.find(entry => entry.src === item.src) : null;
     const clip = isClip ? draftProject.clips.find(entry => entry.src === item.src) : null;
     const name = isImage
-      ? item.name
+      ? item.name.split('/').pop()
       : (model?.src || clip?.src)?.split('/').pop() || (isModel ? '3D model' : 'Media clip');
     const card = document.createElement('article');
     card.className = 'showcase-order-card';
@@ -641,6 +656,7 @@ function renderProject(project) {
   dateInput.value = project.date || '';
   descriptionInput.value = project.description === 'Not specified' ? '' : project.description;
   draftProject = clone(normalizeProject(project));
+  projectMediaFolderName = draftProject.images[0]?.split('/')[0] || '';
   renderLinks();
   renderImages();
   renderModels();
@@ -691,6 +707,7 @@ imageUpload.addEventListener('change', () => {
   }
 
   const files = [...imageUpload.files];
+  const folderName = getProjectMediaFolderName();
   files.forEach((file, index) => {
     if (/\.gif$/i.test(file.name)) {
       setEditorError(`${file.name} is animated. Add it from the Videos & GIFs section instead.`);
@@ -706,18 +723,20 @@ imageUpload.addEventListener('change', () => {
     }
 
     let name = createImageFilename(file, index);
+    let relativePath = `${folderName}/${name}`;
     let suffix = 2;
-    while (photoUrls.has(name)) {
+    while (photoUrls.has(relativePath)) {
       name = createImageFilename(file, `${index}-${suffix}`);
+      relativePath = `${folderName}/${name}`;
       suffix += 1;
     }
     const previewUrl = URL.createObjectURL(file);
-    const path = `${galleryResourcePaths.pictures}/${name}`;
+    const path = `${galleryResourcePaths.pictures}/${relativePath}`;
     uploads.set(path, file);
     objectUrls.set(path, previewUrl);
-    photoUrls.set(name, previewUrl);
-    draftProject.images.push(name);
-    draftProject.showcase.push({ type: 'image', name });
+    photoUrls.set(relativePath, previewUrl);
+    draftProject.images.push(relativePath);
+    draftProject.showcase.push({ type: 'image', name: relativePath });
   });
 
   imageUpload.value = '';
@@ -764,9 +783,10 @@ function addModelFiles(fileList, fromFolder) {
 
   try {
     const folder = `${window.AdminCommon.slugifyProjectTitle(titleInput.value)}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const projectFolder = getProjectMediaFolderName();
     const packageFiles = files.map(file => ({
       file,
-      path: `${galleryResourcePaths.models}/${folder}/${getModelRelativePath(file, fromFolder)}`
+      path: `${galleryResourcePaths.models}/${projectFolder}/${folder}/${getModelRelativePath(file, fromFolder)}`
     }));
     const paths = packageFiles.map(item => item.path);
     if (new Set(paths).size !== paths.length || paths.some(path => uploads.has(path))) {
@@ -827,8 +847,9 @@ clipUpload.addEventListener('change', () => {
   }
 
   const folder = `${window.AdminCommon.slugifyProjectTitle(titleInput.value)}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  const projectFolder = getProjectMediaFolderName();
   files.forEach((file, index) => {
-    const path = `${galleryResourcePaths.videos}/${folder}/${createClipFilename(file, index)}`;
+    const path = `${galleryResourcePaths.videos}/${projectFolder}/${folder}/${createClipFilename(file, index)}`;
     const type = /\.gif$/i.test(file.name) ? 'gif' : 'video';
     const clip = { type, src: path, poster: '' };
     uploads.set(path, file);
@@ -904,7 +925,7 @@ async function loadEditor() {
   try {
     originalProjects = (await window.AdminCommon.loadProjectCatalog())
       .map(project => ({ ...project, models: project.models || [], clips: project.clips || [] }));
-    photoUrls = await window.AdminCommon.loadPhotoFiles();
+    photoUrls = await window.AdminCommon.loadPhotoFiles(originalProjects);
 
     if (isNewProject) {
       document.title = 'Add Project — Gallery Admin';
