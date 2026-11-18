@@ -158,6 +158,10 @@ function validateProjects(projects) {
       }
     }
     project.links.forEach((link, linkIndex) => {
+      if (link.platform !== undefined &&
+          !['artstation', 'sketchfab', 'itchio', 'other'].includes(link.platform)) {
+        throw new Error(`Project "${title}" has an invalid platform in link ${linkIndex + 1}.`);
+      }
       let url;
       try {
         url = new URL(link.url);

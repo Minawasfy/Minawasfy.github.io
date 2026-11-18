@@ -17,13 +17,23 @@ function renderProjectLinks(links) {
   }
 
   const list = document.createElement('ul');
-  links.forEach(({ label, url }) => {
+  links.forEach(({ label, url, platform: savedPlatform }) => {
     const item = document.createElement('li');
     const link = document.createElement('a');
     link.href = url;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.textContent = `${label} ↗`;
+    const platform = window.PortfolioLinkUtils.platformFor({ label, platform: savedPlatform });
+    const linkLabel = document.createElement('span');
+    linkLabel.className = 'project-link-label';
+    linkLabel.textContent = platform === 'other'
+      ? label
+      : window.PortfolioLinkUtils.labelFor(platform);
+    const externalIcon = document.createElement('span');
+    externalIcon.className = 'project-link-external';
+    externalIcon.setAttribute('aria-hidden', 'true');
+    externalIcon.textContent = '↗';
+    link.append(window.PortfolioLinkUtils.createIcon(platform), linkLabel, externalIcon);
     item.appendChild(link);
     list.appendChild(item);
   });

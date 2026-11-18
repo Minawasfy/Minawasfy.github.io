@@ -388,7 +388,69 @@ textarea {
 
 .link-row {
   display: grid;
-  grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.3fr) auto;
+  min-width: 0;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.link-platform-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.link-platform-choices legend {
+  width: 100%;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.link-platform-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.76rem;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.link-platform-choice.is-selected {
+  border-color: var(--accent);
+  background: rgba(214, 173, 112, 0.09);
+  color: var(--text);
+}
+
+.link-platform-choice input {
+  width: 15px;
+  min-width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+.link-platform-choice .portfolio-link-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.link-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr) auto;
   align-items: center;
   gap: 10px;
 }
@@ -897,7 +959,7 @@ select:focus-visible {
     grid-column: auto;
   }
 
-  .link-row {
+  .link-fields {
     grid-template-columns: 1fr;
   }
 

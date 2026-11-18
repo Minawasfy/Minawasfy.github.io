@@ -286,10 +286,29 @@ a {
 }
 
 .project-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   color: #d6d3cd;
   font-size: 0.86rem;
   text-decoration: none;
   transition: color 180ms ease;
+}
+
+.project-link-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.project-link-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-link-external {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .not-specified {

@@ -31,6 +31,16 @@ function clone(value) {
 function normalizeProject(project) {
   const models = project.models || [];
   const clips = project.clips || [];
+  const links = (project.links || []).map(link => {
+    const platform = window.PortfolioLinkUtils.platformFor(link);
+    return {
+      platform,
+      label: platform === 'other'
+        ? String(link.label || '').trim()
+        : window.PortfolioLinkUtils.labelFor(platform),
+      url: String(link.url || '').trim()
+    };
+  });
   const showcase = Array.isArray(project.showcase)
     ? clone(project.showcase)
     : [
@@ -38,7 +48,7 @@ function normalizeProject(project) {
         ...models.map(model => ({ type: 'model', src: model.src })),
         ...clips.map(clip => ({ type: clip.type, src: clip.src }))
       ];
-  return { ...project, models, clips, showcase };
+  return { ...project, links, models, clips, showcase };
 }
 
 function syncMediaFromShowcase() {
@@ -94,7 +104,16 @@ function buildCurrentProject() {
     description: descriptionInput.value.trim() || 'Not specified',
     links: draftProject.links
       .filter(link => link.label.trim() || link.url.trim())
-      .map(link => ({ label: link.label.trim(), url: link.url.trim() })),
+      .map(link => {
+        const platform = window.PortfolioLinkUtils.platformFor(link);
+        return {
+          platform,
+          label: platform === 'other'
+            ? link.label.trim()
+            : window.PortfolioLinkUtils.labelFor(platform),
+          url: link.url.trim()
+        };
+      }),
     models: clone(draftProject.models || []),
     images: [...draftProject.images],
     clips: clone(draftProject.clips || []),
@@ -149,11 +168,20 @@ function renderLinks() {
     const row = document.createElement('div');
     row.className = 'link-row';
 
+    const platform = window.PortfolioLinkUtils.platformFor(link);
+    const choices = document.createElement('fieldset');
+    choices.className = 'link-platform-choices';
+    const legend = document.createElement('legend');
+    legend.textContent = 'Platform';
+    choices.appendChild(legend);
+
     const label = document.createElement('input');
     label.type = 'text';
-    label.placeholder = 'Link label (e.g. ArtStation)';
-    label.setAttribute('aria-label', `Link ${index + 1} label`);
+    label.className = 'link-custom-label';
+    label.placeholder = 'Website name';
+    label.setAttribute('aria-label', `Link ${index + 1} website name`);
     label.value = link.label;
+    label.hidden = platform !== 'other';
     label.addEventListener('input', () => {
       draftProject.links[index].label = label.value;
       clearEditorError();
@@ -171,6 +199,46 @@ function renderLinks() {
       updateCommitButton();
     });
 
+    Object.entries(window.PortfolioLinkUtils.platforms).forEach(([value, definition]) => {
+      const option = document.createElement('label');
+      option.className = 'link-platform-choice';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `link-platform-${index}`;
+      radio.value = value;
+      radio.checked = value === platform;
+      radio.setAttribute('aria-label', `Link ${index + 1}: ${definition.label}`);
+      if (radio.checked) {
+        option.classList.add('is-selected');
+      }
+      const name = document.createElement('span');
+      name.textContent = definition.label;
+      option.append(radio, window.PortfolioLinkUtils.createIcon(value), name);
+      radio.addEventListener('change', () => {
+        if (!radio.checked) {
+          return;
+        }
+        const currentLink = draftProject.links[index];
+        const previousPlatform = window.PortfolioLinkUtils.platformFor(currentLink);
+        currentLink.platform = value;
+        if (value === 'other') {
+          if (previousPlatform !== 'other') {
+            currentLink.label = '';
+          }
+        } else {
+          currentLink.label = window.PortfolioLinkUtils.labelFor(value);
+        }
+        choices.querySelectorAll('.link-platform-choice').forEach(choice => {
+          choice.classList.toggle('is-selected', choice.querySelector('input').checked);
+        });
+        label.value = currentLink.label;
+        label.hidden = value !== 'other';
+        clearEditorError();
+        updateCommitButton();
+      });
+      choices.appendChild(option);
+    });
+
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'button button-delete button-small';
@@ -181,7 +249,10 @@ function renderLinks() {
       updateCommitButton();
     });
 
-    row.append(label, url, remove);
+    const fields = document.createElement('div');
+    fields.className = 'link-fields';
+    fields.append(label, url, remove);
+    row.append(choices, fields);
     linkEditor.appendChild(row);
   });
 }
@@ -745,7 +816,7 @@ clipUpload.addEventListener('change', () => {
 });
 
 document.getElementById('add-link').addEventListener('click', () => {
-  draftProject.links.push({ label: '', url: '' });
+  draftProject.links.push({ platform: 'other', label: '', url: '' });
   renderLinks();
   updateCommitButton();
   linkEditor.lastElementChild?.querySelector('input')?.focus();
