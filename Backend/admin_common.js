@@ -535,6 +535,11 @@ function setupCommitDialog(getChanges, onSuccess) {
     }
     token = tokenInput.value.trim();
     errorMessage.hidden = true;
+    if (uploadItems.length === 0) {
+      await finishCommit();
+      return;
+    }
+
     uploadStageStarted = true;
     isUploading = true;
     renderButtons();
@@ -649,6 +654,12 @@ function setupCommitDialog(getChanges, onSuccess) {
     activeChanges.uploads.forEach((file, path) => {
       uploadItems.push(createUploadItem(path, file));
     });
+    if (uploadItems.length === 0) {
+      const emptyState = document.createElement('p');
+      emptyState.className = 'empty-state';
+      emptyState.textContent = 'No new media files to upload. Existing project media will not be uploaded again.';
+      fileList.appendChild(emptyState);
+    }
     const deletionList = activeChanges.deletedFiles || [];
     deletionList.forEach(path => {
       const row = document.createElement('div');
@@ -656,12 +667,16 @@ function setupCommitDialog(getChanges, onSuccess) {
       row.textContent = `Remove ${path}`;
       fileList.appendChild(row);
     });
-    summary.textContent = `${activeChanges.summary} ${uploadItems.length} file(s) are ready to upload.`;
+    summary.textContent = uploadItems.length
+      ? `${activeChanges.summary} ${uploadItems.length} file(s) are ready to upload.`
+      : activeChanges.summary;
     startUploadButton.hidden = false;
-    startUploadButton.textContent = 'Upload files';
+    startUploadButton.textContent = uploadItems.length ? 'Upload files' : 'Commit changes';
     tokenInput.disabled = false;
     projectDataStatus.textContent = 'Waiting';
-    statusMessage.textContent = 'Choose which files to include, enter your token, then start uploading.';
+    statusMessage.textContent = uploadItems.length
+      ? 'Choose which files to include, enter your token, then start uploading.'
+      : 'Enter your token and commit the project data. No new media files need uploading.';
     errorMessage.hidden = true;
     errorMessage.textContent = '';
     tokenInput.value = '';
