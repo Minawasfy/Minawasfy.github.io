@@ -187,7 +187,15 @@
         "url": "https://www.artstation.com/artwork/ayEqGR"
       }
     ],
-    "models": [],
+    "models": [
+      {
+        "src": "Models/cybernetic-sphere-scene-1794994966505-egiye/Cybernetic Sphere Scene.glb",
+        "assets": [
+          "Models/cybernetic-sphere-scene-1794994966505-egiye/Cybernetic Sphere Scene.glb"
+        ],
+        "poster": ""
+      }
+    ],
     "images": [
       "cybernetic-sphere-scene-1794992343072-0-thumbnail-with-unity-logo.png",
       "cybernetic-sphere-scene-1794992356599-2-thumbnail-001.png",
@@ -251,6 +259,10 @@
       {
         "type": "image",
         "name": "cybernetic-sphere-scene-1794992394762-0-reference.png"
+      },
+      {
+        "type": "model",
+        "src": "Models/cybernetic-sphere-scene-1794994966505-egiye/Cybernetic Sphere Scene.glb"
       }
     ]
   }
