@@ -175,5 +175,83 @@
       "Screenshot_193.png"
     ],
     "clips": []
+  },
+  {
+    "id": "cybernetic-sphere-scene",
+    "title": "Cybernetic Sphere Scene",
+    "date": "2026-11-18",
+    "description": "Scifi Futuristic scene built on Unity URP",
+    "links": [
+      {
+        "label": "Artstation",
+        "url": "https://www.artstation.com/artwork/ayEqGR"
+      }
+    ],
+    "models": [],
+    "images": [
+      "cybernetic-sphere-scene-1794992343072-0-thumbnail-with-unity-logo.png",
+      "cybernetic-sphere-scene-1794992356599-2-thumbnail-001.png",
+      "cybernetic-sphere-scene-1794992356599-3-top-side-view.png",
+      "cybernetic-sphere-scene-1794992363392-0-cyber-ground-top-view.png",
+      "cybernetic-sphere-scene-1794992382245-0-3by4-view.png",
+      "cybernetic-sphere-scene-1794992382245-1-main-view.png",
+      "cybernetic-sphere-scene-1794992382245-2-side-down-view.png",
+      "cybernetic-sphere-scene-1794992382246-3-side-view.png",
+      "cybernetic-sphere-scene-1794992382247-4-top-view.png",
+      "cybernetic-sphere-scene-1794992394762-0-reference.png"
+    ],
+    "clips": [
+      {
+        "type": "video",
+        "src": "Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4",
+        "poster": "cybernetic-sphere-scene-1794992343072-0-thumbnail-with-unity-logo.png"
+      }
+    ],
+    "showcase": [
+      {
+        "type": "video",
+        "src": "Videos/cybernetic-sphere-scene-1794992405300-stnz8/cybernetic-sphere-scene-1794992405300-0-movie-001.mp4"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992343072-0-thumbnail-with-unity-logo.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992356599-2-thumbnail-001.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992356599-3-top-side-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992363392-0-cyber-ground-top-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992382245-0-3by4-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992382245-1-main-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992382245-2-side-down-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992382246-3-side-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992382247-4-top-view.png"
+      },
+      {
+        "type": "image",
+        "name": "cybernetic-sphere-scene-1794992394762-0-reference.png"
+      }
+    ]
   }
 ]
