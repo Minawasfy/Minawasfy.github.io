@@ -31,7 +31,8 @@ async function githubRequest(path, { token, method = 'GET', body } = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(result?.message || `GitHub returned HTTP ${response.status}.`);
+    const message = result?.message || 'Unknown GitHub API error.';
+    throw new Error(`${method} ${path} failed (HTTP ${response.status}): ${message}`);
   }
   return result;
 }
@@ -190,39 +191,109 @@ async function fileToBase64(file) {
   return btoa(binary);
 }
 
-async function createBlob(token, content, encoding) {
-  return githubRequest('/git/blobs', {
-    token,
-    method: 'POST',
-    body: { content, encoding }
+function createBlobWithProgress(token, content, encoding, onProgress) {
+  const path = '/git/blobs';
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+    request.open('POST', `${GITHUB_API}${path}`);
+    request.setRequestHeader('Accept', 'application/vnd.github+json');
+    request.setRequestHeader('X-GitHub-Api-Version', '2022-11-28');
+    request.setRequestHeader('Authorization', `Bearer ${token}`);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.upload.addEventListener('progress', event => {
+      if (event.lengthComputable) {
+        onProgress(Math.min(99, Math.floor((event.loaded / event.total) * 100)));
+      }
+    });
+    request.addEventListener('load', () => {
+      let result;
+      try {
+        result = JSON.parse(request.responseText);
+      } catch {
+        result = null;
+      }
+
+      if (request.status < 200 || request.status >= 300) {
+        const message = result?.message || 'Unknown GitHub API error.';
+        reject(new Error(`POST ${path} failed (HTTP ${request.status}): ${message}`));
+        return;
+      }
+      resolve(result);
+    });
+    request.addEventListener('error', () => {
+      reject(new Error(`POST ${path} failed: network error while uploading.`));
+    });
+    request.addEventListener('abort', () => {
+      reject(new Error(`POST ${path} failed: upload was canceled.`));
+    });
+    request.send(JSON.stringify({ content, encoding }));
   });
 }
 
-async function commitPortfolioChanges({ projects, uploads, deletedFiles, token, message }) {
+function filterProjectsForSelectedUploads(projects, stagedPaths, selectedPaths) {
+  const isAvailable = path => !stagedPaths.has(path) || selectedPaths.has(path);
+  return projects.map(project => {
+    const images = project.images.filter(name => isAvailable(`Photos/${name}`));
+    const models = (project.models || [])
+      .filter(model => {
+        const requiredFiles = model.assets?.length ? model.assets : [model.src];
+        return requiredFiles.every(isAvailable);
+      })
+      .map(model => ({
+        ...model,
+        poster: model.poster && images.includes(model.poster) ? model.poster : ''
+      }));
+    const clips = (project.clips || [])
+      .filter(clip => isAvailable(clip.src))
+      .map(clip => ({
+        ...clip,
+        poster: clip.poster && images.includes(clip.poster) ? clip.poster : ''
+      }));
+    const modelSources = new Set(models.map(model => model.src));
+    const clipSources = new Set(clips.map(clip => clip.src));
+    const showcase = Array.isArray(project.showcase)
+      ? project.showcase.filter(item =>
+          (item.type === 'image' && images.includes(item.name)) ||
+          (item.type === 'model' && modelSources.has(item.src)) ||
+          ((item.type === 'video' || item.type === 'gif') && clipSources.has(item.src))
+        )
+      : project.showcase;
+
+    return { ...project, images, models, clips, showcase };
+  });
+}
+
+async function commitPortfolioChanges({
+  projects,
+  selectedPaths,
+  uploadedBlobs,
+  deletedFiles,
+  projectBlobSha,
+  token,
+  message
+}) {
   validateProjects(projects);
   const ref = await githubRequest(`/git/ref/heads/${GITHUB_BRANCH}`, { token });
   const parentSha = ref.object.sha;
   const parentCommit = await githubRequest(`/git/commits/${parentSha}`, { token });
-  const projectBlob = await createBlob(token, `${JSON.stringify(projects, null, 2)}\n`, 'utf-8');
   const treeEntries = [{
     path: PROJECTS_PATH,
     mode: '100644',
     type: 'blob',
-    sha: projectBlob.sha
+    sha: projectBlobSha
   }];
-
-  const uploadedFiles = await Promise.all(
-    [...uploads.entries()].map(async ([path, file]) => {
-      const blob = await createBlob(token, await fileToBase64(file), 'base64');
-      return {
-        path,
-        mode: '100644',
-        type: 'blob',
-        sha: blob.sha
-      };
-    })
-  );
-  treeEntries.push(...uploadedFiles);
+  selectedPaths.forEach(path => {
+    const sha = uploadedBlobs.get(path);
+    if (!sha) {
+      throw new Error(`The upload for "${path}" is not complete.`);
+    }
+    treeEntries.push({
+      path,
+      mode: '100644',
+      type: 'blob',
+      sha
+    });
+  });
 
   const usedFiles = new Set(projects.flatMap(projectAssetPaths));
   (deletedFiles || [])
@@ -263,56 +334,364 @@ function setupCommitDialog(getChanges, onSuccess) {
   const openButton = document.getElementById('commit-button');
   const dialog = document.getElementById('commit-dialog');
   const confirmButton = document.getElementById('confirm-commit');
+  const startUploadButton = document.getElementById('start-upload');
   const cancelButton = document.getElementById('cancel-commit');
   const tokenInput = document.getElementById('github-token');
   const summary = document.getElementById('commit-summary');
   const errorMessage = document.getElementById('commit-error');
+  const statusMessage = document.getElementById('commit-status');
+  const fileList = document.getElementById('commit-file-list');
+  const projectDataProgress = document.getElementById('project-data-progress');
+  const projectDataPercent = document.getElementById('project-data-percent');
+  const projectDataStatus = document.getElementById('project-data-status');
+  const projectDataRetry = document.getElementById('project-data-retry');
+  const projectDataRow = document.getElementById('project-data-row');
+  let activeChanges = null;
+  let uploadItems = [];
+  let uploadedBlobs = new Map();
+  let token = '';
+  let uploadStageStarted = false;
+  let isUploading = false;
+  let isCommitting = false;
+  let projectBlobSha = '';
+  let projectBlobContent = '';
 
-  openButton.addEventListener('click', () => {
-    const changes = getChanges();
-    summary.textContent = changes.summary;
-    errorMessage.hidden = true;
-    errorMessage.textContent = '';
-    tokenInput.value = '';
-    dialog.showModal();
-    tokenInput.focus();
-  });
+  const setProjectDataState = (state, percent, error = '') => {
+    projectDataRow.classList.toggle('is-success', state === 'success');
+    projectDataRow.classList.toggle('is-failed', state === 'failed');
+    projectDataProgress.value = percent;
+    projectDataPercent.textContent = `${percent}%`;
+    projectDataStatus.textContent = state === 'success'
+      ? 'Uploaded'
+      : state === 'failed'
+        ? 'Upload failed'
+        : state === 'uploading'
+          ? 'Uploading…'
+          : 'Waiting';
+    projectDataRetry.hidden = state !== 'failed';
+    projectDataRow.querySelector('.commit-file-error')?.remove();
+    if (error) {
+      const detail = document.createElement('small');
+      detail.className = 'commit-file-error';
+      detail.textContent = error;
+      projectDataRow.querySelector('.commit-file-info').appendChild(detail);
+    }
+  };
 
-  cancelButton.addEventListener('click', () => {
-    tokenInput.value = '';
-    dialog.close();
-  });
-  dialog.addEventListener('close', () => {
-    tokenInput.value = '';
-  });
+  const renderButtons = () => {
+    startUploadButton.disabled = isUploading || isCommitting;
+    confirmButton.hidden = !uploadStageStarted;
+    confirmButton.disabled = isUploading || isCommitting || !uploadItems.every(item =>
+      !item.checkbox.checked || item.state === 'success'
+    );
+    confirmButton.textContent = isCommitting ? 'Committing…' : 'Commit selected uploads';
+    uploadItems.forEach(item => {
+      item.checkbox.disabled = isUploading || isCommitting;
+      item.retry.disabled = !uploadStageStarted || isUploading || isCommitting || !item.checkbox.checked;
+    });
+    projectDataRetry.disabled = isUploading || isCommitting;
+    cancelButton.disabled = isUploading || isCommitting;
+    tokenInput.disabled = uploadStageStarted || isCommitting;
+  };
 
-  confirmButton.addEventListener('click', async () => {
-    const token = tokenInput.value.trim();
-    if (!token) {
-      errorMessage.textContent = 'Enter a GitHub token to confirm this commit.';
+  const setItemState = (item, state, percent = 0, error = '') => {
+    item.state = state;
+    item.row.classList.toggle('is-success', state === 'success');
+    item.row.classList.toggle('is-failed', state === 'failed');
+    item.progress.value = percent;
+    item.percent.textContent = `${percent}%`;
+    item.status.textContent = state === 'success'
+      ? (item.checkbox.checked ? 'Uploaded' : 'Uploaded · excluded')
+      : state === 'failed'
+        ? 'Upload failed'
+        : state === 'uploading'
+          ? 'Uploading…'
+          : state === 'skipped'
+            ? 'Not uploaded'
+            : 'Waiting';
+    item.retry.hidden = false;
+    item.error.textContent = error;
+    item.error.hidden = !error;
+  };
+
+  const createUploadItem = (path, file) => {
+    const row = document.createElement('article');
+    row.className = 'commit-file-row';
+    const info = document.createElement('div');
+    info.className = 'commit-file-info';
+
+    const heading = document.createElement('div');
+    heading.className = 'commit-file-heading';
+    const filename = document.createElement('strong');
+    filename.textContent = path.split('/').pop();
+    const state = document.createElement('span');
+    state.className = 'commit-file-state';
+    state.textContent = 'Waiting';
+    heading.append(filename, state);
+
+    const pathLabel = document.createElement('small');
+    pathLabel.textContent = `${path} · ${(file.size / (1024 * 1024)).toFixed(1)} MB`;
+
+    const controls = document.createElement('div');
+    controls.className = 'commit-file-controls';
+    const includeLabel = document.createElement('label');
+    includeLabel.className = 'commit-include';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = true;
+    checkbox.setAttribute('aria-label', `Include ${path} in the commit`);
+    const includeText = document.createElement('span');
+    includeText.textContent = 'Include in commit';
+    includeLabel.append(checkbox, includeText);
+
+    const retry = document.createElement('button');
+    retry.className = 'button button-secondary button-small commit-retry';
+    retry.type = 'button';
+    retry.textContent = '↻';
+    retry.title = `Retry upload of ${path}`;
+    retry.setAttribute('aria-label', `Retry upload of ${path}`);
+    retry.hidden = false;
+    controls.append(includeLabel, retry);
+
+    const progressLine = document.createElement('div');
+    progressLine.className = 'commit-progress-line';
+    const progress = document.createElement('progress');
+    progress.max = 100;
+    progress.value = 0;
+    progress.setAttribute('aria-label', `Upload progress for ${path}`);
+    const percent = document.createElement('span');
+    percent.className = 'commit-progress-percent';
+    percent.textContent = '0%';
+    const spacer = document.createElement('span');
+    progressLine.append(progress, percent, spacer);
+
+    const error = document.createElement('small');
+    error.className = 'commit-file-error';
+    error.hidden = true;
+    info.append(heading, pathLabel, controls, progressLine, error);
+    row.appendChild(info);
+    fileList.appendChild(row);
+
+    const item = { path, file, row, checkbox, retry, progress, percent, status: state, error, state: 'pending', sha: '' };
+    checkbox.addEventListener('change', () => {
+      if (item.state === 'success') {
+        item.status.textContent = checkbox.checked ? 'Uploaded' : 'Uploaded · excluded';
+      } else if (item.state === 'failed') {
+        item.status.textContent = checkbox.checked ? 'Upload failed' : 'Failed · excluded';
+      } else if (item.state === 'skipped' && checkbox.checked) {
+        setItemState(item, 'pending');
+      }
+      projectBlobSha = '';
+      setProjectDataState('waiting', 0);
+      renderButtons();
+    });
+    retry.addEventListener('click', () => uploadItem(item));
+    return item;
+  };
+
+  const uploadItem = async (item, isQueued = false) => {
+    if ((isUploading && !isQueued) || isCommitting || !token || !item.checkbox.checked) {
+      return;
+    }
+    if (!isQueued) {
+      isUploading = true;
+    }
+    setItemState(item, 'uploading');
+    statusMessage.textContent = `Preparing ${item.path}…`;
+    renderButtons();
+    try {
+      const content = await fileToBase64(item.file);
+      const result = await createBlobWithProgress(token, content, 'base64', percent => {
+        item.progress.value = percent;
+        item.percent.textContent = `${percent}%`;
+      });
+      item.sha = result.sha;
+      uploadedBlobs.set(item.path, result.sha);
+      setItemState(item, 'success', 100);
+    } catch (error) {
+      item.sha = '';
+      uploadedBlobs.delete(item.path);
+      setItemState(item, 'failed', item.progress.value, error.message);
+    } finally {
+      if (!isQueued) {
+        isUploading = false;
+      }
+      statusMessage.textContent = uploadItems.some(upload => upload.state === 'failed' && upload.checkbox.checked)
+        ? 'Some uploads failed. Retry them, or uncheck them to exclude them from this commit.'
+        : 'Upload finished. Review which files to include, then commit.';
+      renderButtons();
+    }
+  };
+
+  const uploadSelectedFiles = async () => {
+    if (!activeChanges || isUploading || isCommitting) {
+      return;
+    }
+    if (!tokenInput.value.trim()) {
+      errorMessage.textContent = 'Enter a GitHub token to upload and commit these changes.';
       errorMessage.hidden = false;
       tokenInput.focus();
       return;
     }
-
-    confirmButton.disabled = true;
-    confirmButton.textContent = 'Committing…';
+    token = tokenInput.value.trim();
     errorMessage.hidden = true;
+    uploadStageStarted = true;
+    isUploading = true;
+    renderButtons();
+
+    for (const item of uploadItems) {
+      if (!item.checkbox.checked) {
+        setItemState(item, 'skipped');
+        continue;
+      }
+      await uploadItem(item, true);
+    }
+    isUploading = false;
+    startUploadButton.hidden = true;
+    statusMessage.textContent = uploadItems.some(item => item.state === 'failed' && item.checkbox.checked)
+      ? 'Some uploads failed. Retry them, or uncheck them to exclude them from this commit.'
+      : 'Upload finished. Review which files to include, then commit.';
+    renderButtons();
+  };
+
+  const getSelectedProjects = () => {
+    const selectedPaths = new Set(uploadItems
+      .filter(item => item.checkbox.checked && item.state === 'success')
+      .map(item => item.path));
+    const stagedPaths = new Set(uploadItems.map(item => item.path));
+    return { selectedPaths, projects: filterProjectsForSelectedUploads(activeChanges.projects, stagedPaths, selectedPaths) };
+  };
+
+  const finishCommit = async () => {
+    if (!activeChanges || isUploading || isCommitting ||
+        uploadItems.some(item => item.checkbox.checked && item.state !== 'success')) {
+      return;
+    }
+    const { selectedPaths, projects } = getSelectedProjects();
+    const stagedPaths = new Set(uploadItems.map(item => item.path));
+    const selectedUploads = new Map(uploadItems
+      .filter(item => selectedPaths.has(item.path))
+      .map(item => [item.path, item.sha]));
+    const data = `${JSON.stringify(projects, null, 2)}\n`;
+    if (data !== projectBlobContent) {
+      projectBlobContent = data;
+      projectBlobSha = '';
+      setProjectDataState('waiting', 0);
+    }
+
+    isCommitting = true;
+    errorMessage.hidden = true;
+    statusMessage.textContent = 'Preparing project data…';
+    setProjectDataState(projectBlobSha ? 'success' : 'uploading', projectBlobSha ? 100 : 0);
+    renderButtons();
     try {
-      const changes = getChanges();
-      const commitSha = await commitPortfolioChanges({ ...changes, token });
+      validateProjects(projects);
+      if (!projectBlobSha) {
+        const projectBlob = await createBlobWithProgress(token, projectBlobContent, 'utf-8', percent => {
+          projectDataProgress.value = percent;
+          projectDataPercent.textContent = `${percent}%`;
+        });
+        projectBlobSha = projectBlob.sha;
+        setProjectDataState('success', 100);
+      }
+      statusMessage.textContent = 'Creating the GitHub commit…';
+      const commitSha = await commitPortfolioChanges({
+        projects,
+        selectedPaths,
+        uploadedBlobs: selectedUploads,
+        deletedFiles: activeChanges.deletedFiles,
+        projectBlobSha,
+        token,
+        message: activeChanges.message
+      });
+      const result = {
+        projects,
+        committedUploadPaths: [...selectedPaths],
+        pendingUploadPaths: [...stagedPaths].filter(path => !selectedPaths.has(path))
+      };
       tokenInput.value = '';
       dialog.close();
-      onSuccess(commitSha, changes);
+      onSuccess(commitSha, activeChanges, result);
+      activeChanges = null;
+      uploadItems = [];
+      uploadedBlobs = new Map();
+      token = '';
     } catch (error) {
       console.error('Could not commit portfolio changes:', error);
-      tokenInput.value = '';
+      if (!projectBlobSha) {
+        if (error.message.includes('POST /git/blobs failed')) {
+          setProjectDataState('failed', projectDataProgress.value, error.message);
+        } else {
+          setProjectDataState('waiting', 0);
+        }
+      }
       errorMessage.textContent = `${error.message} GitHub could not confirm the update. Check the branch before retrying.`;
       errorMessage.hidden = false;
-      tokenInput.focus();
+      statusMessage.textContent = 'The commit did not finish. You can retry without re-uploading completed files.';
     } finally {
-      confirmButton.disabled = false;
-      confirmButton.textContent = 'Confirm commit';
+      isCommitting = false;
+      renderButtons();
+    }
+  };
+
+  projectDataRetry.addEventListener('click', finishCommit);
+  startUploadButton.addEventListener('click', uploadSelectedFiles);
+  confirmButton.addEventListener('click', finishCommit);
+  openButton.addEventListener('click', () => {
+    activeChanges = getChanges();
+    uploadItems = [];
+    uploadedBlobs = new Map();
+    token = '';
+    uploadStageStarted = false;
+    projectBlobSha = '';
+    projectBlobContent = '';
+    fileList.replaceChildren();
+    activeChanges.uploads.forEach((file, path) => {
+      uploadItems.push(createUploadItem(path, file));
+    });
+    const deletionList = activeChanges.deletedFiles || [];
+    deletionList.forEach(path => {
+      const row = document.createElement('div');
+      row.className = 'commit-file-row commit-file-deletion';
+      row.textContent = `Remove ${path}`;
+      fileList.appendChild(row);
+    });
+    summary.textContent = `${activeChanges.summary} ${uploadItems.length} file(s) are ready to upload.`;
+    startUploadButton.hidden = false;
+    startUploadButton.textContent = 'Upload files';
+    tokenInput.disabled = false;
+    projectDataStatus.textContent = 'Waiting';
+    statusMessage.textContent = 'Choose which files to include, enter your token, then start uploading.';
+    errorMessage.hidden = true;
+    errorMessage.textContent = '';
+    tokenInput.value = '';
+    projectBlobSha = '';
+    projectBlobContent = '';
+    setProjectDataState('waiting', 0);
+    dialog.showModal();
+    tokenInput.focus();
+    renderButtons();
+  });
+
+  cancelButton.addEventListener('click', () => {
+    if (isUploading || isCommitting) {
+      return;
+    }
+    tokenInput.value = '';
+    dialog.close();
+  });
+  dialog.addEventListener('cancel', event => {
+    if (isUploading || isCommitting) {
+      event.preventDefault();
+    }
+  });
+  dialog.addEventListener('close', () => {
+    tokenInput.value = '';
+    if (!isCommitting) {
+      activeChanges = null;
+      uploadItems = [];
+      uploadedBlobs = new Map();
+      token = '';
     }
   });
 }

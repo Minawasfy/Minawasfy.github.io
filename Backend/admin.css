@@ -585,7 +585,9 @@ textarea {
 }
 
 .commit-dialog {
-  width: min(100% - 32px, 470px);
+  width: min(100% - 32px, 680px);
+  max-height: min(90vh, 900px);
+  overflow: auto;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 13px;
@@ -601,6 +603,187 @@ textarea {
 
 .dialog-card {
   padding: 27px;
+}
+
+.dialog-card [hidden] {
+  display: none !important;
+}
+
+.commit-upload-list,
+#commit-file-list {
+  display: grid;
+  gap: 9px;
+}
+
+.commit-upload-list {
+  margin: 18px 0;
+}
+
+.commit-file-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.commit-file-row.is-success {
+  border-color: rgba(69, 173, 117, 0.55);
+  background: rgba(40, 130, 82, 0.09);
+}
+
+.commit-file-row.is-failed {
+  border-color: rgba(241, 130, 119, 0.55);
+}
+
+.commit-file-info {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.commit-file-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.commit-file-heading strong {
+  overflow: hidden;
+  font-size: 0.83rem;
+  text-overflow: ellipsis;
+}
+
+.commit-file-state,
+.commit-file-info small {
+  color: var(--muted);
+  font-size: 0.69rem;
+}
+
+.commit-file-row.is-success .commit-file-state {
+  color: #78d6a0;
+}
+
+.commit-file-row.is-failed .commit-file-state,
+.commit-file-error {
+  color: #f19a92;
+}
+
+.commit-file-info small {
+  overflow-wrap: anywhere;
+}
+
+.commit-file-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.commit-include {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.67rem;
+  white-space: nowrap;
+}
+
+.commit-include input {
+  width: 15px;
+  min-width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.commit-progress-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px 32px;
+  align-items: center;
+  gap: 8px;
+}
+
+.commit-progress-line progress {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: #303237;
+  accent-color: var(--accent);
+}
+
+.commit-file-row.is-success progress {
+  accent-color: #45ad75;
+}
+
+.commit-progress-line progress::-webkit-progress-bar {
+  border-radius: 999px;
+  background: #303237;
+}
+
+.commit-progress-line progress::-webkit-progress-value {
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 120ms linear;
+}
+
+.commit-file-row.is-success progress::-webkit-progress-value {
+  background: #45ad75;
+}
+
+.commit-progress-line progress::-moz-progress-bar {
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.commit-file-row.is-success progress::-moz-progress-bar {
+  background: #45ad75;
+}
+
+.commit-progress-percent {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.commit-file-row.is-success .commit-progress-percent {
+  color: #78d6a0;
+}
+
+.commit-retry {
+  display: grid;
+  width: 30px;
+  min-height: 30px;
+  padding: 0;
+  place-items: center;
+  font-size: 1rem !important;
+}
+
+.commit-file-error {
+  font-size: 0.68rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.commit-token-section {
+  margin-top: 16px;
+}
+
+.commit-status:empty {
+  display: none;
+}
+
+.commit-status {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .dialog-card h2 {
@@ -625,6 +808,9 @@ textarea {
 }
 
 .dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
   justify-content: flex-end;
   margin-top: 20px;
 }
@@ -722,6 +908,22 @@ select:focus-visible {
 
   .admin-footer {
     flex-direction: column;
+  }
+
+  .dialog-card {
+    padding: 20px;
+  }
+
+  .commit-file-heading {
+    align-items: flex-start;
+  }
+
+  .commit-file-state {
+    text-align: right;
+  }
+
+  .commit-include {
+    white-space: normal;
   }
 }
 

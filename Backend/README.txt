@@ -7,7 +7,8 @@ To commit changes:
 1. Create a fine-grained personal access token for Minawasfy/Minawasfy.github.io.
 2. Grant the token Contents: Read and write permission.
 3. Enter the token only in the confirmation dialog when you commit. The admin does not save it.
-4. Commits are made directly to the main branch. GitHub Pages may take a short time to publish them.
+4. The upload window shows progress for each new file. Retry failed uploads with the retry button, or uncheck files to exclude them from this commit. Only successful, selected files are committed. If a glTF dependency is excluded, its model is left out of the project data.
+5. Commits are made directly to the main branch. GitHub Pages may take a short time to publish them.
 
 Project data is stored in Data/projects.json. Screenshots are stored in Photos; 3D model files and their glTF dependencies are stored under Models; videos and GIFs are stored under Videos.
 

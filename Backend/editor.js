@@ -263,7 +263,9 @@ function renderModels() {
     const card = document.createElement('article');
     card.className = 'image-card model-card';
 
-    if (uploads.has(model.src) && /\.gltf$/i.test(model.src)) {
+    const hasPendingGltfFiles = /\.gltf$/i.test(model.src) &&
+      [model.src, ...(model.assets || [])].some(path => uploads.has(path));
+    if (hasPendingGltfFiles) {
       const preview = document.createElement('div');
       preview.className = 'model-preview-placeholder';
       preview.textContent = 'glTF preview available after commit';
@@ -769,13 +771,22 @@ window.AdminCommon.setupCommitDialog(
       summary: `Commit the changes to "${currentProject.title}" with ${currentProject.images.length} screenshot(s), ${currentProject.models.length} 3D model(s), and ${currentProject.clips.length} video/GIF clip(s) to main?`
     };
   },
-  (commitSha) => {
-    originalProjects = getProjectsForCommit();
-    const savedProject = originalProjects.find(item => item.id === buildCurrentProject().id);
+  (commitSha, changes, commitResult) => {
+    const currentDraft = buildCurrentProject();
+    const pendingPaths = new Set(commitResult.pendingUploadPaths);
+    const submittedProject = changes.projects.find(item =>
+      item.title.trim().toLocaleLowerCase() === currentDraft.title.trim().toLocaleLowerCase()
+    );
+    originalProjects = commitResult.projects;
+    const savedProject = originalProjects.find(item => item.id === submittedProject?.id);
+    if (!savedProject) {
+      setNotice(`Changes were committed successfully (${commitSha.slice(0, 7)}). Reopen this project to refresh its saved data.`);
+      return;
+    }
+    currentDraft.id = savedProject.id;
     originalProject = clone(savedProject);
-    draftProject = clone(savedProject);
-    uploads = new Map();
-    renderProject(savedProject);
+    uploads = new Map([...changes.uploads].filter(([path]) => pendingPaths.has(path)));
+    renderProject(currentDraft);
     ready = true;
     document.getElementById('page-title').textContent = savedProject.title;
     if (isNewProject) {
@@ -783,7 +794,10 @@ window.AdminCommon.setupCommitDialog(
       isNewProject = false;
     }
     updateCommitButton();
-    setNotice(`Changes were committed successfully (${commitSha.slice(0, 7)}). GitHub Pages will publish shortly.`);
+    const pendingMessage = pendingPaths.size
+      ? ` ${pendingPaths.size} file(s) remain uncommitted in this editor; retry them or remove them before leaving.`
+      : '';
+    setNotice(`Changes were committed successfully (${commitSha.slice(0, 7)}).${pendingMessage} GitHub Pages will publish shortly.`);
   }
 );
 
