@@ -198,7 +198,6 @@
     ],
     "models": [],
     "images": [
-      "Vi Gauntlets (League of Legends Character)/Screenshot_277.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_281.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_282.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_283.jpg",
@@ -207,6 +206,7 @@
       "Vi Gauntlets (League of Legends Character)/Screenshot_286.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_287.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_288.jpg",
+      "Vi Gauntlets (League of Legends Character)/Screenshot_277.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_289.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_290.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_272.png",
@@ -217,10 +217,6 @@
     ],
     "clips": [],
     "showcase": [
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_277.png"
-      },
       {
         "type": "image",
         "name": "Vi Gauntlets (League of Legends Character)/Screenshot_281.jpg"
@@ -252,6 +248,10 @@
       {
         "type": "image",
         "name": "Vi Gauntlets (League of Legends Character)/Screenshot_288.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_277.png"
       },
       {
         "type": "image",
