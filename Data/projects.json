@@ -243,17 +243,57 @@
   },
   {
     "id": "game-ready-car-engine",
-    "title": "Game Ready Car Engine",
-    "date": "2025-11-09",
-    "description": "Not specified",
-    "links": [],
+    "title": "Game Ready Car Engine  (VR Car Configurator ) for Luxoft",
+    "date": "2025-06-09",
+    "description": "This was a graduation project for a company called Luxoft that manufacture cars; they requested a VR car configurator to sample thier cars for clients ; this car engine was designed and created by me including its animation as shown in the video",
+    "links": [
+      {
+        "platform": "other",
+        "label": "Luxoft",
+        "url": "https://www.luxoft.com/"
+      }
+    ],
     "models": [],
     "images": [
       "Game Ready Car Engine/Screenshot_268.png",
       "Game Ready Car Engine/Screenshot_269.png",
-      "Game Ready Car Engine/Screenshot_270.png"
+      "Game Ready Car Engine/Screenshot_270.png",
+      "Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071789048-0-picture1.png",
+      "Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071789049-1-picture2.png"
     ],
-    "clips": []
+    "clips": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071798508-a74mx/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071798508-0-vid-20250625-wa0011.mp4",
+        "poster": ""
+      }
+    ],
+    "showcase": [
+      {
+        "type": "image",
+        "name": "Game Ready Car Engine/Screenshot_268.png"
+      },
+      {
+        "type": "image",
+        "name": "Game Ready Car Engine/Screenshot_269.png"
+      },
+      {
+        "type": "image",
+        "name": "Game Ready Car Engine/Screenshot_270.png"
+      },
+      {
+        "type": "image",
+        "name": "Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071789048-0-picture1.png"
+      },
+      {
+        "type": "image",
+        "name": "Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071789049-1-picture2.png"
+      },
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Game Ready Car Engine/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071798508-a74mx/game-ready-car-engine-vr-car-configurator-for-luxoft-1795071798508-0-vid-20250625-wa0011.mp4"
+      }
+    ]
   },
   {
     "id": "game-ready-shell-axe",
