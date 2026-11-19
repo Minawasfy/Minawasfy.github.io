@@ -1,10 +1,16 @@
 [
   {
     "id": "prison-room",
-    "title": "Prison Room",
-    "date": "2025-11-09",
-    "description": "Not specified",
-    "links": [],
+    "title": "Vacsi Cure",
+    "date": "2024-12-09",
+    "description": "This is an environment wireframe made for a game in Unity on itch.io during game jam",
+    "links": [
+      {
+        "platform": "itchio",
+        "label": "itch.io",
+        "url": "https://pofo-x.itch.io/vacsicurev20"
+      }
+    ],
     "models": [],
     "images": [
       "Prison Room/Screenshot_61.png",
@@ -187,18 +193,15 @@
   {
     "id": "vi-gauntlets",
     "title": "Vi Gauntlets (League of Legends Character)",
-    "date": "2025-11-25",
-    "description": "These are 2 Gauntlets made based on a Skin for a character called VI from the game",
-    "links": [
-      {
-        "platform": "other",
-        "label": "League of Legends Model Viewer",
-        "url": "https://modelviewer.lol/model-viewer?id=254048"
-      }
-    ],
+    "date": "2025-11-09",
+    "description": "Not specified",
+    "links": [],
     "models": [],
     "images": [
+      "Vi Gauntlets (League of Legends Character)/Screenshot_277.png",
+      "Vi Gauntlets (League of Legends Character)/Screenshot_280.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_281.jpg",
+      "Vi Gauntlets (League of Legends Character)/Screenshot_281.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_282.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_283.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_284.jpg",
@@ -206,7 +209,6 @@
       "Vi Gauntlets (League of Legends Character)/Screenshot_286.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_287.jpg",
       "Vi Gauntlets (League of Legends Character)/Screenshot_288.jpg",
-      "Vi Gauntlets (League of Legends Character)/Screenshot_277.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_289.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_290.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_272.png",
@@ -215,73 +217,7 @@
       "Vi Gauntlets (League of Legends Character)/Screenshot_275.png",
       "Vi Gauntlets (League of Legends Character)/Screenshot_276.png"
     ],
-    "clips": [],
-    "showcase": [
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_281.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_282.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_283.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_284.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_285.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_286.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_287.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_288.jpg"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_277.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_289.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_290.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_272.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_273.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_274.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_275.png"
-      },
-      {
-        "type": "image",
-        "name": "Vi Gauntlets (League of Legends Character)/Screenshot_276.png"
-      }
-    ]
+    "clips": []
   },
   {
     "id": "asterius",
@@ -291,12 +227,57 @@
     "links": [],
     "models": [],
     "images": [
+      "Asterius (Hades Character)/asterius-hades-character-1795072987736-3-picture6.jpg",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987735-0-picture3.jpg",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987735-1-picture4.jpg",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987736-2-picture5.jpg",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987736-4-picture7.png",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987736-5-picture8.png",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987737-6-picture9.png",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987737-7-picture10.png",
+      "Asterius (Hades Character)/asterius-hades-character-1795072987737-8-picture11.png",
       "Asterius (Hades Character)/Screenshot_237.png",
       "Asterius (Hades Character)/Screenshot_238.png",
       "Asterius (Hades Character)/Screenshot_239.png"
     ],
     "clips": [],
     "showcase": [
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987736-3-picture6.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987735-0-picture3.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987735-1-picture4.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987736-2-picture5.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987736-4-picture7.png"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987736-5-picture8.png"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987737-6-picture9.png"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987737-7-picture10.png"
+      },
+      {
+        "type": "image",
+        "name": "Asterius (Hades Character)/asterius-hades-character-1795072987737-8-picture11.png"
+      },
       {
         "type": "image",
         "name": "Asterius (Hades Character)/Screenshot_237.png"
