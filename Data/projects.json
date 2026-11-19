@@ -24,19 +24,137 @@
   },
   {
     "id": "scary-light-house",
-    "title": "Scary Light house",
-    "date": "2025-11-09",
-    "description": "Not specified",
-    "links": [],
+    "title": "House of Dagon",
+    "date": "2025-02-02",
+    "description": "A game created on unity engine 6 during a Boss game jam hosted by itch.io",
+    "links": [
+      {
+        "platform": "itchio",
+        "label": "itch.io",
+        "url": "https://mathabet.itch.io/tbd"
+      }
+    ],
     "models": [],
     "images": [
       "Scary Light house/Screenshot_278.png",
       "Scary Light house/Screenshot_279.png",
       "Scary Light house/Screenshot_240.png",
       "Scary Light house/Screenshot_241.png",
-      "Scary Light house/Screenshot_242.png"
+      "Scary Light house/Screenshot_242.png",
+      "Scary Light house/house-of-dagon-1795069904504-0-picture7.png",
+      "Scary Light house/house-of-dagon-1795069916666-0-elite-lurker-1.jpg",
+      "Scary Light house/house-of-dagon-1795069916668-1-elite-lurker-2.jpg",
+      "Scary Light house/house-of-dagon-1795069916668-2-elite-lurker-3.jpg",
+      "Scary Light house/house-of-dagon-1795069916668-3-elite-lurker-4.jpg",
+      "Scary Light house/house-of-dagon-1795069916669-4-elite-lurker-5.jpg",
+      "Scary Light house/house-of-dagon-1795069916669-5-lurker-1.jpg",
+      "Scary Light house/house-of-dagon-1795069916670-6-lurker-2.jpg",
+      "Scary Light house/house-of-dagon-1795069916671-7-lurker-3.jpg",
+      "Scary Light house/house-of-dagon-1795069916672-8-lurker-4.jpg",
+      "Scary Light house/house-of-dagon-1795069916673-9-lurker-5.jpg",
+      "Scary Light house/house-of-dagon-1795069925149-0-picture3.jpg",
+      "Scary Light house/house-of-dagon-1795069925150-1-picture4.jpg",
+      "Scary Light house/house-of-dagon-1795069925150-2-picture5.jpg",
+      "Scary Light house/house-of-dagon-1795069925151-3-picture6.jpg",
+      "Scary Light house/house-of-dagon-1795069931966-0-screenshot-64.png",
+      "Scary Light house/house-of-dagon-1795069931966-1-screenshot-65.png",
+      "Scary Light house/house-of-dagon-1795069931966-2-screenshot-66.png"
     ],
-    "clips": []
+    "clips": [],
+    "showcase": [
+      {
+        "type": "image",
+        "name": "Scary Light house/Screenshot_278.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/Screenshot_279.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/Screenshot_240.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/Screenshot_241.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/Screenshot_242.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069904504-0-picture7.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916666-0-elite-lurker-1.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916668-1-elite-lurker-2.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916668-2-elite-lurker-3.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916668-3-elite-lurker-4.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916669-4-elite-lurker-5.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916669-5-lurker-1.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916670-6-lurker-2.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916671-7-lurker-3.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916672-8-lurker-4.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069916673-9-lurker-5.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069925149-0-picture3.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069925150-1-picture4.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069925150-2-picture5.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069925151-3-picture6.jpg"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069931966-0-screenshot-64.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069931966-1-screenshot-65.png"
+      },
+      {
+        "type": "image",
+        "name": "Scary Light house/house-of-dagon-1795069931966-2-screenshot-66.png"
+      }
+    ]
   },
   {
     "id": "vine-foliage",
