@@ -1,10 +1,16 @@
 [
   {
     "id": "prison-room",
-    "title": "Prison Room",
+    "title": "Vaciscure",
     "date": "2025-11-09",
-    "description": "Not specified",
-    "links": [],
+    "description": "The game takes place entirely inside a large, mysterious building. The main character starts locked in a small room with no idea how they got there. When the game begins, they manage to escape the room and start exploring the building. The goal is to find a hidden vaccine that can cure the zombies and turn them back into humans. To reach it, the character must solve puzzles, explore different parts of the building, and avoid zombies roaming the halls. Along the way, they discover clues about what happened in the building and why it is filled with zombies. The game focuses on solving puzzles, staying hidden, and carefully making progress toward finding the vaccine and saving the zombies, all while trying to survive",
+    "links": [
+      {
+        "platform": "itchio",
+        "label": "itch.io",
+        "url": "https://pofo-x.itch.io/vacsicurev20"
+      }
+    ],
     "models": [],
     "images": [
       "Prison Room/Screenshot_61.png",
