@@ -508,5 +508,58 @@
         "name": "Mechanic Tool Cabinet/mechanic-tool-cabinet-1795073931465-0-screenshot-281.png"
       }
     ]
+  },
+  {
+    "id": "handicapped-kids-learning-room",
+    "title": "Handicapped Kids Learning Room",
+    "date": "2026-07-08",
+    "description": "This is a room with real scale for a Handicapped school to design a healthy environment for the kids showcased in VR",
+    "links": [],
+    "models": [],
+    "images": [
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603548-0-screenshot-319.png",
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603549-1-screenshot-320.png",
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603550-2-screenshot-321.png",
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603551-3-screenshot-322.png",
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603551-4-screenshot-323.png",
+      "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603552-5-screenshot-324.png"
+    ],
+    "clips": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276580905-c1m3z/handicapped-kids-learning-room-1795276580905-0-vid-20260917-wa0016.mp4",
+        "poster": ""
+      }
+    ],
+    "showcase": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276580905-c1m3z/handicapped-kids-learning-room-1795276580905-0-vid-20260917-wa0016.mp4"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603548-0-screenshot-319.png"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603549-1-screenshot-320.png"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603550-2-screenshot-321.png"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603551-3-screenshot-322.png"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603551-4-screenshot-323.png"
+      },
+      {
+        "type": "image",
+        "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603552-5-screenshot-324.png"
+      }
+    ]
   }
 ]
