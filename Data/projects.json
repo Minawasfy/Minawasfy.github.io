@@ -598,5 +598,33 @@
         "name": "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
       }
     ]
+  },
+  {
+    "id": "space-scene",
+    "title": "Space Scene",
+    "date": "2026-09-15",
+    "description": "This is a space scene made for VR to experience the space immersivly from a spaceship",
+    "links": [],
+    "models": [],
+    "images": [
+      "Space Scene/space-scene-1795278478455-0-screenshot-326.png"
+    ],
+    "clips": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Space Scene/space-scene-1795278472636-eygfw/space-scene-1795278472636-0-vid-20260923-wa0001.mp4",
+        "poster": ""
+      }
+    ],
+    "showcase": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Space Scene/space-scene-1795278472636-eygfw/space-scene-1795278472636-0-vid-20260923-wa0001.mp4"
+      },
+      {
+        "type": "image",
+        "name": "Space Scene/space-scene-1795278478455-0-screenshot-326.png"
+      }
+    ]
   }
 ]
