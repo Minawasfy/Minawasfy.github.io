@@ -561,5 +561,42 @@
         "name": "Handicapped Kids Learning Room/handicapped-kids-learning-room-1795276603552-5-screenshot-324.png"
       }
     ]
+  },
+  {
+    "id": "scifi-school",
+    "title": "Scifi School",
+    "date": "2026-08-13",
+    "description": "This is a school made for a company to visualize how e learning can help kids visually learn better in VR\n\nContributed in many of the assets made for the environment including the shaders as well\n\nThis was done in Unity 6",
+    "links": [],
+    "models": [],
+    "images": [
+      "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
+    ],
+    "clips": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Scifi School/scifi-school-1795278089952-nlyyk/scifi-school-1795278089952-0-vid-20260830-wa0004-1-1.mp4",
+        "poster": ""
+      },
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Scifi School/scifi-school-1795278243081-fbqio/scifi-school-1795278243081-0-vid-20260818-wa0021.mp4",
+        "poster": ""
+      }
+    ],
+    "showcase": [
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Scifi School/scifi-school-1795278089952-nlyyk/scifi-school-1795278089952-0-vid-20260830-wa0004-1-1.mp4"
+      },
+      {
+        "type": "video",
+        "src": "Gallery Resources/videos/Scifi School/scifi-school-1795278243081-fbqio/scifi-school-1795278243081-0-vid-20260818-wa0021.mp4"
+      },
+      {
+        "type": "image",
+        "name": "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
+      }
+    ]
   }
 ]
