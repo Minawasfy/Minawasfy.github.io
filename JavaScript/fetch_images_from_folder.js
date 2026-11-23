@@ -6,7 +6,8 @@ async function loadImages() {
       window.portfolioProjectsPromise,
       window.fetchPortfolioImageUrls()
     ]);
-    const projectImageNames = projects.flatMap(project => project.images);
+    const orderedProjects = window.sortPortfolioProjectsByUpdate(projects);
+    const projectImageNames = orderedProjects.flatMap(project => project.images);
     const missingImages = projectImageNames.filter(name => !imageUrls.has(name));
 
     if (missingImages.length > 0) {
@@ -15,7 +16,7 @@ async function loadImages() {
 
     gallery.replaceChildren();
 
-    projects.forEach(project => {
+    orderedProjects.forEach(project => {
       const coverName = project.images[0];
       const figure = document.createElement('figure');
       figure.className = 'gallery-item';
@@ -39,7 +40,7 @@ async function loadImages() {
       gallery.appendChild(figure);
     });
 
-    if (projects.length === 0) {
+    if (orderedProjects.length === 0) {
       const message = document.createElement('p');
       message.className = 'gallery-message';
       message.textContent = 'No projects are available right now.';

@@ -10,6 +10,25 @@ window.portfolioProjectsPromise = fetch('Data/projects.json', { cache: 'no-store
   return projects;
 });
 
+window.sortPortfolioProjectsByUpdate = function (projects) {
+  return projects
+    .map((project, index) => ({
+      project,
+      index,
+      timestamp: project.updatedAt
+        ? Date.parse(project.updatedAt)
+        : project.date
+          ? Date.parse(`${project.date}T00:00:00Z`)
+          : 0
+    }))
+    .sort((left, right) => {
+      const leftTime = Number.isNaN(left.timestamp) ? 0 : left.timestamp;
+      const rightTime = Number.isNaN(right.timestamp) ? 0 : right.timestamp;
+      return rightTime - leftTime || left.index - right.index;
+    })
+    .map(entry => entry.project);
+};
+
 window.fetchPortfolioImageUrls = async function () {
   const projects = await window.portfolioProjectsPromise;
   const imageNames = new Set(projects.flatMap(project => project.images));
