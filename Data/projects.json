@@ -2,6 +2,7 @@
   {
     "id": "prison-room",
     "title": "Vacsicure",
+    "updatedAt": "2026-11-20T20:49:50+02:00",
     "date": "2025-11-09",
     "description": "The game takes place entirely inside a large, mysterious building. The main character starts locked in a small room with no idea how they got there. When the game begins, they manage to escape the room and start exploring the building. The goal is to find a hidden vaccine that can cure the zombies and turn them back into humans. To reach it, the character must solve puzzles, explore different parts of the building, and avoid zombies roaming the halls. Along the way, they discover clues about what happened in the building and why it is filled with zombies. The game focuses on solving puzzles, staying hidden, and carefully making progress toward finding the vaccine and saving the zombies, all while trying to survive",
     "links": [
@@ -31,6 +32,7 @@
   {
     "id": "scary-light-house",
     "title": "House of Dagon",
+    "updatedAt": "2026-11-19T08:35:17+02:00",
     "date": "2025-02-02",
     "description": "A game created on unity engine 6 during a Boss game jam hosted by itch.io",
     "links": [
@@ -193,6 +195,7 @@
   {
     "id": "vi-gauntlets",
     "title": "Vi Gauntlets (League of Legends Character)",
+    "updatedAt": "2026-11-19T09:31:06+02:00",
     "date": "2025-11-25",
     "description": "These are 2 Gauntlets made based on a Skin for a character called VI from the game",
     "links": [
@@ -292,6 +295,7 @@
   {
     "id": "asterius",
     "title": "Asterius (Hades Character)",
+    "updatedAt": "2026-11-19T09:26:04+02:00",
     "date": "2025-11-09",
     "description": "This is a Boss from a game called Hades; sculpted and textured and rendered using unreal engine",
     "links": [],
@@ -320,6 +324,7 @@
   {
     "id": "game-ready-car-engine",
     "title": "Game Ready Car Engine  (VR Car Configurator ) for Luxoft",
+    "updatedAt": "2026-11-19T09:04:34+02:00",
     "date": "2025-06-09",
     "description": "This was a graduation project for a company called Luxoft that manufacture cars; they requested a VR car configurator to sample thier cars for clients ; this car engine was designed and created by me including its animation as shown in the video",
     "links": [
@@ -399,6 +404,7 @@
   {
     "id": "cybernetic-sphere-scene",
     "title": "Cybernetic Sphere Scene",
+    "updatedAt": "2026-11-18T12:36:07+02:00",
     "date": "2026-11-18",
     "description": "Scifi Futuristic scene built on Unity URP",
     "links": [
@@ -489,6 +495,7 @@
   {
     "id": "mechanic-tool-cabinet",
     "title": "Mechanic Tool Cabinet",
+    "updatedAt": "2026-11-19T09:39:17+02:00",
     "date": "2026-11-19",
     "description": "This is a Game ready Mechanic Tool Cabinet",
     "links": [],
@@ -512,6 +519,7 @@
   {
     "id": "handicapped-kids-learning-room",
     "title": "Handicapped Kids Learning Room",
+    "updatedAt": "2026-11-21T17:58:07+02:00",
     "date": "2026-07-08",
     "description": "This is a room with real scale for a Handicapped school to design a healthy environment for the kids showcased in VR",
     "links": [],
@@ -565,6 +573,7 @@
   {
     "id": "scifi-school",
     "title": "Scifi School",
+    "updatedAt": "2026-11-23T06:11:54+02:00",
     "date": "2026-08-13",
     "description": "This is a school made for a company to visualize how e learning can help kids visually learn better in VR\n\nContributed in many of the assets made for the environment including the shaders as well\n\nThis was done in Unity 6",
     "links": [],
@@ -607,6 +616,7 @@
   {
     "id": "space-scene",
     "title": "Space Scene",
+    "updatedAt": "2026-11-21T18:30:03+02:00",
     "date": "2026-09-15",
     "description": "This is a space scene made for VR to experience the space immersivly from a spaceship",
     "links": [],
