@@ -111,9 +111,9 @@ function buildProjectId(title) {
   return candidate;
 }
 
-function buildCurrentProject() {
+function buildCurrentProject({ forCommit = false } = {}) {
   const title = titleInput.value.trim();
-  return {
+  const project = {
     id: isNewProject ? buildProjectId(title) : originalProject.id,
     title,
     date: dateInput.value,
@@ -135,10 +135,16 @@ function buildCurrentProject() {
     clips: clone(draftProject.clips || []),
     showcase: clone(draftProject.showcase)
   };
+  if (forCommit) {
+    project.updatedAt = new Date().toISOString();
+  } else if (originalProject?.updatedAt) {
+    project.updatedAt = originalProject.updatedAt;
+  }
+  return project;
 }
 
 function getProjectsForCommit() {
-  const project = buildCurrentProject();
+  const project = buildCurrentProject({ forCommit: true });
   if (isNewProject) {
     return [...originalProjects, project];
   }
@@ -882,7 +888,7 @@ window.AdminCommon.setupCommitDialog(
     const usedFiles = new Set(projects.flatMap(window.AdminCommon.projectAssetPaths));
     const deletedFiles = [...new Set(originalProjects.flatMap(window.AdminCommon.projectAssetPaths))]
       .filter(path => !usedFiles.has(path));
-    const currentProject = buildCurrentProject();
+    const currentProject = buildCurrentProject({ forCommit: true });
     return {
       projects,
       uploads,

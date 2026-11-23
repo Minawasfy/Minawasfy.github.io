@@ -132,6 +132,10 @@ function validateProjects(projects) {
         (project.clips !== undefined && !Array.isArray(project.clips))) {
       throw new Error(`Project "${title}" has invalid media or showcase data.`);
     }
+    if (project.updatedAt !== undefined &&
+        (typeof project.updatedAt !== 'string' || Number.isNaN(Date.parse(project.updatedAt)))) {
+      throw new Error(`Project "${title}" has an invalid update timestamp.`);
+    }
     if (project.images.some(path => !isSafeRelativeAssetPath(`${GALLERY_RESOURCE_PATHS.pictures}/${path}`, GALLERY_RESOURCE_PATHS.pictures) ||
         path.split('/').length !== 2)) {
       throw new Error(`Project "${title}" has an invalid screenshot path.`);

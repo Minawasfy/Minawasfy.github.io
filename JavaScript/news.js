@@ -5,15 +5,20 @@ const siteNewsData = Promise.all([
 ]);
 
 function projectDateValue(project) {
-  const timestamp = project.date ? Date.parse(`${project.date}T00:00:00Z`) : 0;
+  const timestamp = project.updatedAt
+    ? Date.parse(project.updatedAt)
+    : project.date
+      ? Date.parse(`${project.date}T00:00:00Z`)
+      : 0;
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
-function formatProjectDate(date) {
+function formatProjectDate(project) {
+  const date = project.updatedAt || (project.date ? `${project.date}T00:00:00` : '');
   if (!date) {
     return '';
   }
-  return new Date(`${date}T00:00:00`).toLocaleDateString('en', {
+  return new Date(date).toLocaleDateString('en', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
@@ -189,10 +194,10 @@ function createNewsWidget(host, widgetIndex) {
       const projectTitle = document.createElement('strong');
       projectTitle.textContent = project.title;
       copy.append(message, projectTitle);
-      if (project.date) {
+      if (project.updatedAt || project.date) {
         const date = document.createElement('time');
-        date.dateTime = project.date;
-        date.textContent = formatProjectDate(project.date);
+        date.dateTime = project.updatedAt || project.date;
+        date.textContent = project.updatedAt ? `Updated ${formatProjectDate(project)}` : formatProjectDate(project);
         copy.appendChild(date);
       }
       item.appendChild(copy);
