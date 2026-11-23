@@ -1,4 +1,7 @@
-window.portfolioProjectsPromise = fetch('Data/projects.json', { cache: 'no-store' }).then(response => {
+const portfolioAssetVersion = '20261123-masonry';
+
+window.portfolioAssetVersion = portfolioAssetVersion;
+window.portfolioProjectsPromise = fetch(`Data/projects.json?v=${portfolioAssetVersion}`, { cache: 'no-store' }).then(response => {
   if (!response.ok) {
     throw new Error(`Could not load projects (${response.status}).`);
   }
