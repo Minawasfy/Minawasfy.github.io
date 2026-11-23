@@ -570,7 +570,8 @@
     "links": [],
     "models": [],
     "images": [
-      "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
+      "Scifi School/scifi-school-1795278256996-0-screenshot-325.png",
+      "Scifi School/scifi-school-1795407076228-0-screenshot-6.png"
     ],
     "clips": [
       {
@@ -596,6 +597,10 @@
       {
         "type": "image",
         "name": "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
+      },
+      {
+        "type": "image",
+        "name": "Scifi School/scifi-school-1795407076228-0-screenshot-6.png"
       }
     ]
   },
