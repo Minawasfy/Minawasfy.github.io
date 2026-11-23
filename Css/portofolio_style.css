@@ -109,17 +109,17 @@ a {
 }
 
 .gallery {
-  columns: 3 260px;
-  column-gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
   min-height: 120px;
 }
 
 .gallery-item {
-  display: inline-block;
+  display: block;
   width: 100%;
-  margin: 0 0 18px;
+  margin: 0;
   overflow: hidden;
-  break-inside: avoid;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);
@@ -196,8 +196,8 @@ a:focus-visible {
   }
 
   .gallery {
-    columns: 2 150px;
-    column-gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .gallery-item {
@@ -213,7 +213,7 @@ a:focus-visible {
 
 @media (max-width: 380px) {
   .gallery {
-    columns: 1;
+    grid-template-columns: 1fr;
   }
 }
 
