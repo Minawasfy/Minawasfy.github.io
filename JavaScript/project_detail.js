@@ -212,6 +212,10 @@ async function loadProject() {
       } else if (item.type === 'model' && modelsBySource.has(item.src)) {
         const model = modelsBySource.get(item.src);
         figure.classList.add('project-model');
+        const modelTitle = document.createElement('span');
+        modelTitle.className = 'project-model-title';
+        modelTitle.textContent = '3D MODEL VIEWER';
+        modelTitle.setAttribute('aria-hidden', 'true');
         const viewer = document.createElement('model-viewer');
         viewer.className = 'project-model-viewer';
         viewer.src = model.src;
@@ -226,7 +230,7 @@ async function loadProject() {
           showProjectMessage(`The 3D model "${model.src.split('/').pop()}" could not be loaded.`);
         }, { once: true });
         caption.textContent = `3D MODEL · ${sequence}`;
-        figure.append(viewer, caption);
+        figure.append(modelTitle, viewer, caption);
       } else if ((item.type === 'video' || item.type === 'gif') &&
           clipsBySource.has(item.src) && clipsBySource.get(item.src).type === item.type) {
         const clip = clipsBySource.get(item.src);
