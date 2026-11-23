@@ -15,16 +15,6 @@ async function loadImages() {
     }
 
     gallery.replaceChildren();
-    const updateGalleryRows = () => {
-      const columnCount = Number.parseInt(
-        getComputedStyle(gallery).getPropertyValue('--gallery-columns'),
-        10
-      ) || 1;
-      const rowCount = Math.max(1, Math.ceil(orderedProjects.length / columnCount));
-      gallery.style.setProperty('--gallery-rows', String(rowCount));
-    };
-    updateGalleryRows();
-    window.addEventListener('resize', updateGalleryRows);
 
     orderedProjects.forEach(project => {
       const coverName = project.images[0];

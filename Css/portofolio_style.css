@@ -111,9 +111,7 @@ a {
 .gallery {
   display: grid;
   --gallery-columns: 3;
-  grid-auto-flow: column;
   grid-template-columns: repeat(var(--gallery-columns), minmax(0, 1fr));
-  grid-template-rows: repeat(var(--gallery-rows, 1), auto);
   gap: 18px;
   min-height: 120px;
 }
