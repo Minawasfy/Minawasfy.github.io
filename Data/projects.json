@@ -573,14 +573,12 @@
   {
     "id": "scifi-school",
     "title": "Scifi School",
-    "updatedAt": "2026-11-23T06:11:54+02:00",
     "date": "2026-08-13",
     "description": "This is a school made for a company to visualize how e learning can help kids visually learn better in VR\n\nContributed in many of the assets made for the environment including the shaders as well\n\nThis was done in Unity 6",
     "links": [],
     "models": [],
     "images": [
-      "Scifi School/scifi-school-1795278256996-0-screenshot-325.png",
-      "Scifi School/scifi-school-1795407076228-0-screenshot-6.png"
+      "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
     ],
     "clips": [
       {
@@ -606,12 +604,9 @@
       {
         "type": "image",
         "name": "Scifi School/scifi-school-1795278256996-0-screenshot-325.png"
-      },
-      {
-        "type": "image",
-        "name": "Scifi School/scifi-school-1795407076228-0-screenshot-6.png"
       }
-    ]
+    ],
+    "updatedAt": "2026-11-23T10:22:21.368Z"
   },
   {
     "id": "space-scene",
