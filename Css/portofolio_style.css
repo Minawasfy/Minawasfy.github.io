@@ -110,7 +110,10 @@ a {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  --gallery-columns: 3;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(var(--gallery-columns), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--gallery-rows, 1), auto);
   gap: 18px;
   min-height: 120px;
 }
@@ -196,7 +199,7 @@ a:focus-visible {
   }
 
   .gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --gallery-columns: 2;
     gap: 12px;
   }
 
@@ -213,7 +216,7 @@ a:focus-visible {
 
 @media (max-width: 380px) {
   .gallery {
-    grid-template-columns: 1fr;
+    --gallery-columns: 1;
   }
 }
 
